@@ -1,0 +1,191 @@
+.game-container {
+  min-height: 100vh;
+  padding: var(--spacing-xl) 0;
+}
+
+.game-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.game-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.back-btn {
+  flex-shrink: 0;
+}
+
+.level-info {
+  flex: 1;
+  text-align: center;
+  min-width: 300px;
+}
+
+.level-title {
+  font-family: var(--font-heading);
+  color: var(--dark);
+  margin-bottom: var(--spacing-sm);
+}
+
+.level-description {
+  color: var(--text);
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.level-story {
+  background: var(--light);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  font-style: italic;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.riddle-btn {
+  flex-shrink: 0;
+  min-width: 150px;
+}
+
+.riddle-btn.solved {
+  background: var(--success);
+  opacity: 0.7;
+}
+
+.game-main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+
+.game-left {
+  position: sticky;
+  top: calc(var(--spacing-xl) + 80px);
+}
+
+.game-center {
+  display: flex;
+  justify-content: center;
+}
+
+/* Riddle Modal */
+.riddle-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-md);
+}
+
+.riddle-modal {
+  background: var(--light);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+}
+
+.riddle-modal h3 {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  color: var(--dark);
+  font-family: var(--font-heading);
+}
+
+.riddle-text {
+  background: var(--gradient-purple);
+  color: var(--light);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  font-size: 1.2rem;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+}
+
+.riddle-input {
+  width: 100%;
+  padding: var(--spacing-md);
+  font-size: 1.1rem;
+  border: 3px solid var(--border);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-primary);
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--transition-base);
+}
+
+.riddle-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+}
+
+.riddle-actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.riddle-actions .btn {
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .game-main {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+  
+  .game-left {
+    position: static;
+    order: 2;
+  }
+  
+  .game-center {
+    order: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-container {
+    padding: var(--spacing-lg) 0;
+  }
+  
+  .game-header-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .back-btn,
+  .riddle-btn {
+    width: 100%;
+  }
+  
+  .level-info {
+    min-width: auto;
+  }
+  
+  .level-title {
+    font-size: 1.75rem;
+  }
+  
+  .level-description {
+    font-size: 1rem;
+  }
+}

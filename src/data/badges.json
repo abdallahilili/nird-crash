@@ -1,0 +1,95 @@
+{
+  "badges": [
+    {
+      "id": "innovateur",
+      "name": "Innovateur",
+      "description": "Complétez 3 niveaux sur l'innovation et les idées",
+      "icon": "/assets/badges/innovateur.png",
+      "color": "#FFD700",
+      "requirement": {
+        "type": "themes_completed",
+        "themes": ["Innovation", "Idées", "Créativité"],
+        "count": 3
+      }
+    },
+    {
+      "id": "createur",
+      "name": "Créateur",
+      "description": "Trouvez 50 mots au total",
+      "icon": "/assets/badges/createur.png",
+      "color": "#FF6B6B",
+      "requirement": {
+        "type": "words_found_total",
+        "count": 50
+      }
+    },
+    {
+      "id": "contributeur",
+      "name": "Contributeur",
+      "description": "Complétez 5 niveaux sur la collaboration et la communauté",
+      "icon": "/assets/badges/contributeur.png",
+      "color": "#4ECDC4",
+      "requirement": {
+        "type": "themes_completed",
+        "themes": ["Collaboration", "Participation Citoyenne", "Communauté", "Projets Locaux", "Inclusion"],
+        "count": 5
+      }
+    },
+    {
+      "id": "resolveur",
+      "name": "Résolveur",
+      "description": "Résolvez toutes les énigmes (12 niveaux)",
+      "icon": "/assets/badges/resolveur.png",
+      "color": "#95E1D3",
+      "requirement": {
+        "type": "riddles_solved",
+        "count": 12
+      }
+    },
+    {
+      "id": "expert_nird",
+      "name": "Expert NIRD",
+      "description": "Obtenez 3 étoiles sur tous les niveaux",
+      "icon": "/assets/badges/expert.png",
+      "color": "#9B59B6",
+      "requirement": {
+        "type": "perfect_levels",
+        "count": 12
+      }
+    },
+    {
+      "id": "ecologiste",
+      "name": "Écologiste",
+      "description": "Complétez tous les niveaux environnement",
+      "icon": "/assets/badges/ecologiste.png",
+      "color": "#27AE60",
+      "requirement": {
+        "type": "themes_completed",
+        "themes": ["Développement Durable", "Biodiversité", "Environnement"],
+        "count": 3
+      }
+    },
+    {
+      "id": "communautaire",
+      "name": "Esprit Communautaire",
+      "description": "Complétez 20 niveaux au total",
+      "icon": "/assets/badges/communautaire.png",
+      "color": "#3498DB",
+      "requirement": {
+        "type": "levels_completed",
+        "count": 20
+      }
+    },
+    {
+      "id": "maitre_mots",
+      "name": "Maître des Mots",
+      "description": "Trouvez 100 mots au total",
+      "icon": "/assets/badges/maitre.png",
+      "color": "#E91E63",
+      "requirement": {
+        "type": "words_found_total",
+        "count": 100
+      }
+    }
+  ]
+}

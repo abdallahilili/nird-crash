@@ -1,0 +1,41 @@
+.floating-points {
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.points-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #FFD93D;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.5),
+    0 0 10px rgba(255, 217, 61, 0.5);
+  white-space: nowrap;
+}
+
+.floating-points.combo .points-value {
+  color: #FF6B6B;
+  font-size: 2.5rem;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(255, 107, 107, 0.8),
+    0 0 25px rgba(255, 107, 107, 0.5);
+}
+
+.combo-label {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #FF6B6B;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+  animation: pulse-glow 0.5s infinite alternate;
+}
+
+@keyframes pulse-glow {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.3);
+  }
+}

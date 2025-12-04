@@ -1,0 +1,56 @@
+.app {
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.welcome-screen {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, #FF6B6B22 0%, #4ECDC444 100%);
+}
+
+.welcome-content {
+  text-align: center;
+  max-width: 600px;
+  background: var(--light);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.welcome-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: var(--spacing-lg);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: float 3s ease-in-out infinite;
+}
+
+.welcome-description {
+  font-size: 1.25rem;
+  color: var(--text);
+  line-height: 1.8;
+  margin-bottom: var(--spacing-xl);
+}
+
+.btn-large {
+  font-size: 1.25rem;
+  padding: var(--spacing-md) var(--spacing-2xl);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .welcome-content {
+    padding: var(--spacing-xl);
+  }
+  
+  .welcome-description {
+    font-size: 1.1rem;
+  }
+}

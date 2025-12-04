@@ -1,0 +1,44 @@
+/* Nouveaux styles pour animations avancées */
+
+.word-found {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  transform-style: preserve-3d;
+}
+
+.progress-fill {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-wave {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.3) 50%, 
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.word-item.found {
+  animation: foundPulse 0.3s ease-out;
+}
+
+@keyframes foundPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

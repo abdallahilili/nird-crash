@@ -1,0 +1,700 @@
+{
+  "levels": [
+    {
+      "id": 1,
+      "theme": "Définition NIRD",
+      "title": "Qu'est-ce que le NIRD ?",
+      "description": "Découvrez la signification de notre organisation",
+      "backgroundColor": "#2563EB",
+      "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&auto=format&fit=crop",
+      "story": "Le NIRD - Nouvel Institut de Recherche Digitale - est une organisation fictive créée pour faire semblant qu'on innove alors qu'on recycle les mêmes vieilles idées depuis des années !",
+      "riddle": "Je prétends innover mais je copie les autres. Qui suis-je ?",
+      "riddleAnswer": "NIRD",
+      "words": [
+        {
+          "word": "NIRD",
+          "explanation": "Nouvel Institut de Recherche Digitale : là où on réinvente la roue carrée depuis 2015.",
+          "points": 100,
+          "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w-400&auto=format&fit=crop"
+        },
+        {
+          "word": "BULLSHIT",
+          "explanation": "Notre carburant principal. Sans bullshit bingo, pas de réunion productive !",
+          "points": 75,
+          "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "PPT",
+          "explanation": "Notre produit phare. Si c'est joli en PowerPoint, c'est forcément réalisable !",
+          "points": 50,
+          "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "AGILE",
+          "explanation": "Méthodologie qu'on dit suivre mais qu'on pratique comme un éléphant dans un magasin de porcelaine.",
+          "points": 65,
+          "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["N", "I", "R", "D", "B"],
+        ["U", "L", "S", "H", "I"],
+        ["T", "P", "P", "T", "A"],
+        ["G", "I", "L", "E", "N"],
+        ["O", "V", "A", "T", "I"]
+      ],
+      "requiredWords": 2,
+      "targetScore": 150,
+      "difficulty": 1,
+      "motivationalMessages": [
+        "Bravo ! Vous maîtrisez déjà l'art du bullshit corporate ! 📊",
+        "Excellent ! Vous êtes prêt pour votre première réunion inutile ! 🎯",
+        "Parfait ! Vous méritez un poste de middle manager ! 👔"
+      ]
+    },
+    {
+      "id": 2,
+      "theme": "Microsoft Éducation",
+      "title": "Windows Éducation",
+      "description": "Parce que mettre Windows dans les écoles, c'est former les futurs rebooteurs",
+      "backgroundColor": "#7CB9E8",
+      "image": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&auto=format&fit=crop",
+      "story": "Microsoft équipe une école avec Surface qui plantent dès qu'un élève éternue trop fort. Les mises à jour s'installent PENDANT les examens !",
+      "riddle": "Je m'installe au pire moment et demande un redémarrage. Qui suis-je ?",
+      "riddleAnswer": "UPDATE",
+      "words": [
+        {
+          "word": "WINDOWS",
+          "explanation": "Système d'exploitation qui apprend la patience aux enfants via les écrans bleus aléatoires.",
+          "points": 40,
+          "image": "https://images.unsplash.com/photo-1585771724680-3f0e115656d5?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "TEAMS",
+          "explanation": "Où les profs perdent 15 minutes à dire 'Vous m'entendez ? Je vous vois pas !'",
+          "points": 35,
+          "image": "https://images.unsplash.com/photo-1581272120079-6c3f5b81b2e9?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "OFFICE",
+          "explanation": "Pack logiciel qui coûte plus cher que le budget annuel de la cantine scolaire.",
+          "points": 45,
+          "image": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "EDGE",
+          "explanation": "Navigateur que personne n'utilise mais qui vient quand même par défaut.",
+          "points": 25,
+          "image": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "ONEDRIVE",
+          "explanation": "Cloud qui syncronise tellement bien qu'il duplique tous les fichiers 3 fois.",
+          "points": 30,
+          "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["W", "I", "N", "D", "O"],
+        ["T", "E", "A", "M", "S"],
+        ["O", "F", "F", "I", "C"],
+        ["E", "D", "G", "E", "O"],
+        ["N", "E", "D", "R", "V"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 140,
+      "difficulty": 2,
+      "motivationalMessages": [
+        "Génial ! Vous êtes prêt à gérer un helpdesk scolaire ! 🖥️",
+        "Bravo ! Vous supportez déjà les écrans bleus ! 💙",
+        "Excellent ! Vous maîtrisez l'art du 'avez-vous essayé de redémarrer ?' 🔄"
+      ]
+    },
+    {
+      "id": 3,
+      "theme": "Google Classroom",
+      "title": "Google Éducatif",
+      "description": "Parce que vos données valent bien un cours gratuit",
+      "backgroundColor": "#34A853",
+      "image": "https://images.unsplash.com/photo-1591115765373-5207764f72e4?w=800&auto=format&fit=crop",
+      "story": "Google propose des outils éducatifs gratuits ! En échange, ils savent que Jean-Kévin a copié son devoir sur les dinosaures... et l'annoncent à tous ses contacts.",
+      "riddle": "Je suis gratuit mais je connais tous tes secrets. Qui suis-je ?",
+      "riddleAnswer": "GOOGLE",
+      "words": [
+        {
+          "word": "CHROME",
+          "explanation": "Navigateur qui mange tellement de RAM que l'ordi de l'école fond littéralement.",
+          "points": 35,
+          "image": "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "DOCS",
+          "explanation": "Où 30 élèves éditent simultanément le même document et suppriment le travail des autres 'par accident'.",
+          "points": 40,
+          "image": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "MEET",
+          "explanation": "Vidéo-conférence où les élèves découvrent que leur prof porte un pyjama en bas.",
+          "points": 30,
+          "image": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "FORMS",
+          "explanation": "Quiz où les réponses sont 'JE SAIS PAS' répété 50 fois.",
+          "points": 25,
+          "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "DRIVE",
+          "explanation": "Le trou noir numérique où les devoirs disparaissent mystérieusement.",
+          "points": 35,
+          "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["C", "H", "R", "O", "M"],
+        ["D", "O", "C", "S", "G"],
+        ["M", "E", "E", "T", "O"],
+        ["F", "O", "R", "M", "S"],
+        ["D", "R", "I", "V", "E"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 145,
+      "difficulty": 2,
+      "motivationalMessages": [
+        "Super ! Google vous offre un cookie (de tracking) ! 🍪",
+        "Bravo ! Vos données éducatives seront bien utilisées... pour du ciblage pub ! 🎯",
+        "Excellent ! Vous êtes prêt pour une carrière dans la surveillance numérique ! 👁️"
+      ]
+    },
+    {
+      "id": 4,
+      "theme": "Apple School",
+      "title": "iÉducation",
+      "description": "Parce qu'être cool à l'école, ça a un prix (très élevé)",
+      "backgroundColor": "#000000",
+      "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&auto=format&fit=crop",
+      "story": "Une école achète des iPads pour tous les élèves. Ils sont tellement verrouillés que même ouvrir un PDF nécessite l'approbation de Tim Cook en personne.",
+      "riddle": "Je coûte un rein mais je fais la même chose qu'un Android. Qui suis-je ?",
+      "riddleAnswer": "IPAD",
+      "words": [
+        {
+          "word": "MACBOOK",
+          "explanation": "Ordinateur si fin qu'il se plie quand un élève pose son cartable dessus.",
+          "points": 60,
+          "image": "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "IPAD",
+          "explanation": "Tablette qui coûte plus cher que le salaire mensuel du prof mais ne peut pas ouvrir un fichier Flash.",
+          "points": 50,
+          "image": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "IOS",
+          "explanation": "Système si fermé qu'installer une app éducative nécessite 12 confirmations.",
+          "points": 45,
+          "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "ITUNESU",
+          "explanation": "Platforme éducative abandonnée par Apple avant même son lancement officiel.",
+          "points": 30,
+          "image": "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "DONGLE",
+          "explanation": "Accessoire obligatoire à 89€ pour connecter une clé USB. Parce que l'innovation, c'est ajouter des adaptateurs.",
+          "points": 40,
+          "image": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["M", "A", "C", "B", "O"],
+        ["I", "P", "A", "D", "O"],
+        ["I", "O", "S", "I", "T"],
+        ["U", "N", "E", "S", "U"],
+        ["D", "O", "N", "G", "L"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 165,
+      "difficulty": 3,
+      "motivationalMessages": [
+        "Magnifique ! Vous justifiez maintenant le prix exorbitant ! 💸",
+        "Bravo ! Vous croyez que c'est innovant parce que c'est cher ! ✨",
+        "Excellent ! Vous êtes prêt à vendre un rein pour la suite ! 🍎"
+      ]
+    },
+    {
+      "id": 5,
+      "theme": "Facebook Campus",
+      "title": "Meta Université",
+      "description": "Parce que Zuckerberg sait mieux que toi ce que tu devrais étudier",
+      "backgroundColor": "#1877F2",
+      "image": "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800&auto=format&fit=crop",
+      "story": "Facebook lance son campus virtuel ! Où les cours sont interrompus par des pubs pour des produits que vous regardiez hier... un peu flippant.",
+      "riddle": "Je connais tes études avant même toi. Qui suis-je ?",
+      "riddleAnswer": "ALGORITHME",
+      "words": [
+        {
+          "word": "OCULUS",
+          "explanation": "Casque VR qui donne la nausée après 5 minutes de cours virtuel.",
+          "points": 55,
+          "image": "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "META",
+          "explanation": "Nouveau nom pour faire oublier les scandales de données. Spoiler : ça ne marche pas.",
+          "points": 45,
+          "image": "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "REELS",
+          "explanation": "Cours en 30 secondes avec fond musical TikTok. Parfait pour apprendre la physique quantique !",
+          "points": 35,
+          "image": "https://images.unsplash.com/photo-1611605698323-b1e99cfd37ea?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "GROUPS",
+          "explanation": "Où les parents d'élèves débattent de sujets importants comme la couleur des cahiers.",
+          "points": 30,
+          "image": "https://images.unsplash.com/photo-1611605698323-b1e99cfd37ea?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "HORIZON",
+          "explanation": "Monde virtuel éducatif où ton avatar peut assister au cours... en tombant à travers le plancher (bug classique).",
+          "points": 60,
+          "image": "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["O", "C", "U", "L", "U"],
+        ["M", "E", "T", "A", "S"],
+        ["R", "E", "E", "L", "S"],
+        ["G", "R", "O", "U", "P"],
+        ["H", "O", "R", "I", "Z"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 160,
+      "difficulty": 3,
+      "motivationalMessages": [
+        "Génial ! Vous êtes prêt pour la dystopie éducative ! 🕶️",
+        "Bravo ! Mark Zuckerberg est fier de vous (et a vos données) ! 👨💻",
+        "Excellent ! Votre vie privée est un concept du passé ! 🔓"
+      ]
+    },
+    {
+      "id": 6,
+      "theme": "Amazon Edu",
+      "title": "AWS Academy",
+      "description": "Tout savoir sur le cloud... et tout acheter sur Amazon",
+      "backgroundColor": "#FF9900",
+      "image": "https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=800&auto=format&fit=crop",
+      "story": "Amazon forme les futurs ingénieurs cloud. Le premier exercice : configurer un serveur pour qu'il recommande automatiquement des produits Amazon aux étudiants.",
+      "riddle": "Je te forme et je te vends des trucs en même temps. Qui suis-je ?",
+      "riddleAnswer": "AMAZON",
+      "words": [
+        {
+          "word": "AWS",
+          "explanation": "Cloud si complexe que même les formateurs s'y perdent. La facture surprise est le vrai examen final.",
+          "points": 70,
+          "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "ALEXA",
+          "explanation": "Assistante qui répond 'Je ne comprends pas la question' quand un élève demande de l'aide en maths.",
+          "points": 40,
+          "image": "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "PRIME",
+          "explanation": "Abonnement étudiant qui offre la livraison gratuite... et l'espionnage gratuit aussi.",
+          "points": 35,
+          "image": "https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "KINDLE",
+          "explanation": "Liseuse qui rend impossible de prêter un manuel scolaire à un camarade (DRM oblige).",
+          "points": 45,
+          "image": "https://images.unsplash.com/photo-1544716278-e513176f20b5?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "S3",
+          "explanation": "Service de stockage où les devoirs disparaissent si tu oublies de payer 0.023$.",
+          "points": 50,
+          "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["A", "W", "S", "A", "L"],
+        ["E", "X", "A", "P", "R"],
+        ["I", "M", "E", "K", "I"],
+        ["N", "D", "L", "E", "S"],
+        ["T", "H", "R", "E", "E"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 175,
+      "difficulty": 3,
+      "motivationalMessages": [
+        "Superbe ! Votre facture AWS va être... intéressante ! 💸",
+        "Bravo ! Jeff Bezos vous remercie pour vos données ! 🚀",
+        "Excellent ! Vous maîtrisez l'art de tout monétiser ! 📈"
+      ]
+    },
+    {
+      "id": 7,
+      "theme": "Tesla Tech School",
+      "title": "Elon's Academy",
+      "description": "Parce que qui a besoin de pédagogie quand on a des fusées ?",
+      "backgroundColor": "#E82127",
+      "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&auto=format&fit=crop",
+      "story": "Elon Musk ouvre une école tech. Les cours sont donnés via des tweets de 280 caractères maximum. La pédagogie est optionnelle.",
+      "riddle": "Je promets la Lune mais je livre un scooter. Qui suis-je ?",
+      "riddleAnswer": "TESLA",
+      "words": [
+        {
+          "word": "TESLA",
+          "explanation": "Voiture électrique qui sert de salle de classe mobile. L'autopilot conduit droit dans un arbre pendant le cours.",
+          "points": 65,
+          "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "STARLINK",
+          "explanation": "Internet satellite pour les écoles reculées. Débit : excellent quand il ne pleut pas (c'est-à-dire rarement).",
+          "points": 70,
+          "image": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "NEURALINK",
+          "explanation": "Projet pour connecter le cerveau à l'ordinateur. Version école : pour tricher sans se faire prendre.",
+          "points": 85,
+          "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "BORING",
+          "explanation": "Entreprise qui creuse des tunnels. Métaphore parfaite pour certains cours magistraux.",
+          "points": 40,
+          "image": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "TWEET",
+          "explanation": "Support pédagogique officiel. Cours de physique en 3 tweets max, emojis inclus.",
+          "points": 30,
+          "image": "https://images.unsplash.com/photo-1611605698323-b1e99cfd37ea?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["T", "E", "S", "L", "A"],
+        ["S", "T", "A", "R", "L"],
+        ["N", "E", "U", "R", "A"],
+        ["B", "O", "R", "I", "N"],
+        ["T", "W", "E", "E", "T"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 200,
+      "difficulty": 4,
+      "motivationalMessages": [
+        "To the moon ! Enfin, peut-être... 🚀",
+        "Bravo ! Vous êtes prêt à coloniser Mars (ou au moins à en parler sur Twitter)! 🌌",
+        "Excellent ! Vous maîtrisez l'art de la surpromesse ! ✨"
+      ]
+    },
+    {
+      "id": 8,
+      "theme": "Netflix & Learn",
+      "title": "Streaming Éducatif",
+      "description": "Parce que binge-watcher des documentaires, c'est comme étudier... non ?",
+      "backgroundColor": "#E50914",
+      "image": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=800&auto=format&fit=crop",
+      "story": "Netflix lance sa plateforme éducative ! Où tu commences un documentaire sur la Rome antique et finis par regarder 5 saisons d'une série sur des boulangers.",
+      "riddle": "Je te promets la culture et te donne de la téléréalité. Qui suis-je ?",
+      "riddleAnswer": "NETFLIX",
+      "words": [
+        {
+          "word": "BINGE",
+          "explanation": "Méthode d'étude recommandée : 10 épisodes d'affilée la veille de l'examen.",
+          "points": 45,
+          "image": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "SERIES",
+          "explanation": "Cours magistraux en 45 épisodes avec cliffhanger à chaque fin de chapitre.",
+          "points": 40,
+          "image": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "DOCU",
+          "explanation": "Documentaire éducatif interrompu par 'Voulez-vous continuer à regarder ?' toutes les 20 minutes.",
+          "points": 35,
+          "image": "https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "PROFIL",
+          "explanation": "Netflix sait que tu préfères les séries B à tes cours. Et il te les recommande activement.",
+          "points": 30,
+          "image": "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "BUFFERING",
+          "explanation": "Expérience éducative authentique : attendre que le cours charge pendant 10 minutes.",
+          "points": 25,
+          "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["B", "I", "N", "G", "E"],
+        ["S", "E", "R", "I", "E"],
+        ["D", "O", "C", "U", "P"],
+        ["R", "O", "F", "I", "L"],
+        ["B", "U", "F", "F", "E"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 135,
+      "difficulty": 2,
+      "motivationalMessages": [
+        "Bravo ! Vous êtes un expert du binge-learning ! 🍿",
+        "Excellent ! Vois avez validé le module 'Procrastination avancée' ! 📺",
+        "Génial ! Netflix vous recommande maintenant des cours... que vous ne regarderez pas ! 🎬"
+      ]
+    },
+    {
+      "id": 9,
+      "theme": "TikTok University",
+      "title": "Micro-Learning",
+      "description": "Tout apprendre en 60 secondes (ou moins)",
+      "backgroundColor": "#000000",
+      "image": "https://images.unsplash.com/photo-1611605698323-b1e99cfd37ea?w=800&auto=format&fit=crop",
+      "story": "TikTok révolutionne l'éducation ! Apprenez la théorie de la relativité en 15 secondes avec un fond musical de reggaeton. What could go wrong?",
+      "riddle": "Je réduis le savoir à un clip dansable. Qui suis-je ?",
+      "riddleAnswer": "TIKTOK",
+      "words": [
+        {
+          "word": "TIKTOK",
+          "explanation": "Plateforme éducative où la guerre de 14-18 est expliquée avec des danses.",
+          "points": 50,
+          "image": "https://images.unsplash.com/photo-1611605698323-b1e99cfd37ea?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "REEL",
+          "explanation": "Cours de philosophie en 30 secondes. Nietzsche en accéléré avec des effets spéciaux.",
+          "points": 35,
+          "image": "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "TREND",
+          "explanation": "Méthode pédagogique : si c'est viral, c'est que c'est vrai. #Facts",
+          "points": 30,
+          "image": "https://images.unsplash.com/photo-1611605698335-8b1569810433?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "FILTRE",
+          "explanation": "Rend tout sujet plus intéressant... surtout avec des oreilles de chat.",
+          "points": 25,
+          "image": "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "VIRAL",
+          "explanation": "Objectif éducatif suprême : être partagé 1M de fois plutôt que compris.",
+          "points": 40,
+          "image": "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["T", "I", "K", "T", "O"],
+        ["R", "E", "E", "L", "T"],
+        ["R", "E", "N", "D", "F"],
+        ["I", "L", "T", "R", "E"],
+        ["V", "I", "R", "A", "L"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 140,
+      "difficulty": 2,
+      "motivationalMessages": [
+        "OMG ! Vous êtes viral ! (Mais avez-vous compris le cours?) 🎵",
+        "Slay ! Votre éducation est désormais dansante! 💃",
+        "Periodt ! Vous maîtrisez le micro-learning ! ✨"
+      ]
+    },
+    {
+      "id": 10,
+      "theme": "Uber for Tutors",
+      "title": "Éducation à la demande",
+      "description": "Un prof en 5 minutes, comme une pizza",
+      "backgroundColor": "#09091A",
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop",
+      "story": "Uber lance son service de tutorat ! Un prof arrive en 7 minutes... mais annule au dernier moment. Surge pricing appliqué pendant les examens.",
+      "riddle": "Je te promets un prof et j'envoie un étudiant en première année. Qui suis-je ?",
+      "riddleAnswer": "UBER",
+      "words": [
+        {
+          "word": "UBER",
+          "explanation": "Service de tutorat où la note dépend de la gentillesse du prof (et de ton pourboire).",
+          "points": 45,
+          "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "SURGE",
+          "explanation": "Prix multiplié par 3 la veille des partiels. Pédagogie capitaliste !",
+          "points": 55,
+          "image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "RATING",
+          "explanation": "Évaluation pédagogique réduite à 5 étoiles. 1 étoile = prof qui t'a fait réfléchir.",
+          "points": 30,
+          "image": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "POOL",
+          "explanation": "Cours collectif où tu partages ton tuteur avec 5 autres élèves... qui n'ont pas le même niveau.",
+          "points": 35,
+          "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "EATS",
+          "explanation": "Service annexe : commande de pizza pendant le cours. L'éducation, mais avec du fromage.",
+          "points": 25,
+          "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["U", "B", "E", "R", "S"],
+        ["U", "R", "G", "E", "R"],
+        ["A", "T", "I", "N", "G"],
+        ["P", "O", "O", "L", "E"],
+        ["A", "T", "S", "U", "B"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 150,
+      "difficulty": 3,
+      "motivationalMessages": [
+        "5 étoiles ! Enfin, 3 si on est honnête... ⭐",
+        "Bravo ! Vous avez survécu au surge pricing pédagogique ! 💸",
+        "Excellent ! Votre éducation est désormais une commodité ! 🚗"
+      ]
+    },
+    {
+      "id": 11,
+      "theme": "Zoom School",
+      "title": "L'Éducation Pixellisée",
+      "description": "Quand ton prof devient un GIF laggy",
+      "backgroundColor": "#2D8CFF",
+      "image": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&auto=format&fit=crop",
+      "story": "Zoom héberge 90% des cours en ligne du monde. Le reste du temps, c'est pour que les élèves fassent semblant d'avoir des problèmes de connexion pendant les interros.",
+      "riddle": "Je freeze au moment crucial. Qui suis-je ?",
+      "riddleAnswer": "ZOOM",
+      "words": [
+        {
+          "word": "ZOOM",
+          "explanation": "Plateforme où 'Je n'ai pas le son' est le mensonge pédagogique le plus courant.",
+          "points": 40,
+          "image": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "MUTE",
+          "explanation": "Super-pouvoir des élèves : faire semblant de participer sans dire un mot.",
+          "points": 25,
+          "image": "https://images.unsplash.com/photo-1611605698323-b1e99cfd37ea?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "BREAKOUT",
+          "explanation": "Salles de groupe où personne ne parle pendant 20 minutes puis dit 'on a fini'.",
+          "points": 35,
+          "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "VIRTUAL",
+          "explanation": "Fond d'écran qui prétend que tu es à la bibliothèque alors que tu es en pyjama.",
+          "points": 30,
+          "image": "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "LAG",
+          "explanation": "Excuse universelle : 'Désolé professeur, je laggais' (traduction : je scrollais TikTok).",
+          "points": 20,
+          "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["Z", "O", "O", "M", "M"],
+        ["U", "T", "E", "B", "R"],
+        ["E", "A", "K", "O", "U"],
+        ["T", "V", "I", "R", "T"],
+        ["U", "A", "L", "A", "G"]
+      ],
+      "requiredWords": 4,
+      "targetScore": 130,
+      "difficulty": 2,
+      "motivationalMessages": [
+        "Bravo ! Vous maîtrisez l'art du 'je n'ai pas le son' ! 🔇",
+        "Excellent ! Votre fond virtuel est très convaincant (pas du tout)! 🖼️",
+        "Parfait ! Vous êtes un expert du lag stratégique ! ⏳"
+      ]
+    },
+    {
+      "id": 12,
+      "theme": "Blockchain Academy",
+      "title": "NFT Diplomas",
+      "description": "Parce que ton diplôme doit être unique... et incompréhensible",
+      "backgroundColor": "#F7931A",
+      "image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop",
+      "story": "Une université délivre désormais des diplômes en NFT. C'est décentralisé, transparent, et absolument inutile dans le monde réel. Mais au moins c'est hype !",
+      "riddle": "Je consomme l'énergie d'un pays pour un diplôme jpeg. Qui suis-je ?",
+      "riddleAnswer": "NFT",
+      "words": [
+        {
+          "word": "BLOCKCHAIN",
+          "explanation": "Technologie révolutionnaire pour stocker ton 8/20 en maths de manière immuable.",
+          "points": 70,
+          "image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "NFT",
+          "explanation": "Diplôme sous forme de singe cartoon. La valeur pédagogique est discutable.",
+          "points": 50,
+          "image": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "CRYPTO",
+          "explanation": "Monnaie pour payer les frais de scolarité. Cours du jour : -40%. Oups.",
+          "points": 60,
+          "image": "https://images.unsplash.com/photo-1620336655055-bd87c5d1d73f?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "DAO",
+          "explanation": "Gouvernance étudiante où chaque décision nécessite 3 semaines de vote.",
+          "points": 45,
+          "image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "GASFEE",
+          "explanation": "Frais pour valider ton examen. Plus cher que l'examen lui-même. Logique.",
+          "points": 55,
+          "image": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=400&auto=format&fit=crop"
+        },
+        {
+          "word": "WEB3",
+          "explanation": "Éducation décentralisée ! Traduction : personne n'est responsable si ça foire.",
+          "points": 65,
+          "image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&auto=format&fit=crop"
+        }
+      ],
+      "gridLetters": [
+        ["B", "L", "O", "C", "K"],
+        ["N", "F", "T", "C", "R"],
+        ["Y", "P", "T", "O", "D"],
+        ["A", "O", "G", "A", "S"],
+        ["F", "E", "E", "W", "E"]
+      ],
+      "requiredWords": 5,
+      "targetScore": 225,
+      "difficulty": 4,
+      "motivationalMessages": [
+        "To the moon ! Enfin, votre diplôme y est peut-être déjà ! 🚀",
+        "Bravo ! Vous possédez désormais un diplôme... numérique... décentralisé... euh... 🎓",
+        "HODL ! Votre éducation va prendre de la valeur (peut-être)! 💎"
+      ]
+    }
+  ]
+}
