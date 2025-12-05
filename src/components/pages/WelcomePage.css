@@ -114,12 +114,16 @@
   width: 100%;
   height: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
   border: none;
 }
 
 .video-placeholder {
   aspect-ratio: 16 / 9;
   background: var(--gradient-secondary);
+=======
+  background: var(--dark);
+>>>>>>> 4a40e080fd5ad1c4667a7634402529cd0a08c531
 =======
   background: var(--dark);
 >>>>>>> 4a40e080fd5ad1c4667a7634402529cd0a08c531
