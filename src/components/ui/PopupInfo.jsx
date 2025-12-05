@@ -1,8 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { getImageWithFallback } from '../../utils/imageHelper';
 import './PopupInfo.css';
 
 const PopupInfo = ({ isOpen, onClose, wordData, levelTheme }) => {
   if (!isOpen || !wordData) return null;
+  
+  // Convertir l'URL en chemin local si nécessaire
+  const imagePath = getImageWithFallback(wordData.image);
   
   return (
     <AnimatePresence>
@@ -44,14 +48,21 @@ const PopupInfo = ({ isOpen, onClose, wordData, levelTheme }) => {
             </motion.div>
           </div>
           
-          {wordData.image && (
+          {imagePath && imagePath !== '/src/assets/images/placeholder.png' && (
             <motion.div 
               className="popup-image"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
             >
-              <img src={wordData.image} alt={wordData.word} />
+              <img 
+                src={imagePath} 
+                alt={wordData.word}
+                onError={(e) => {
+                  // Si l'image ne charge pas, utiliser le placeholder
+                  e.target.src = '/src/assets/images/placeholder.png';
+                }}
+              />
             </motion.div>
           )}
           

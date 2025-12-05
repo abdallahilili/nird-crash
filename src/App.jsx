@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { AnimatePresence } from 'framer-motion';
 import useGameStore from './store/gameStore';
 import Header from './components/ui/Header';
+import WelcomePage from './components/pages/WelcomePage';
 import LevelSelector from './components/ui/LevelSelector';
 import Game from './components/game/Game';
 import levelsData from './data/levels.json';
@@ -10,7 +12,8 @@ import './styles/animations.css';
 import './App.css';
 
 function App() {
-  const [showLevelSelector, setShowLevelSelector] = useState(true);
+  // États de navigation
+  const [currentView, setCurrentView] = useState('welcome'); // 'welcome' | 'levels' | 'game'
   const [currentLevelData, setCurrentLevelData] = useState(null);
   
   const {
@@ -22,73 +25,94 @@ function App() {
   } = useGameStore();
   
   useEffect(() => {
-    // Check for unlocked badges on mount and when relevant state changes
+    // Vérifie les badges au montage et lors des changements de score
     checkBadges(badgesData.badges);
-  }, [totalScore]);
+  }, [totalScore, checkBadges]);
   
+  // Navigation vers le sélecteur de niveaux
+  const handleStartGame = () => {
+    setCurrentView('levels');
+  };
+  
+  // Sélection d'un niveau
   const handleSelectLevel = (levelId) => {
     const level = levelsData.levels.find(l => l.id === levelId);
     if (level) {
       setCurrentLevel(levelId);
       setCurrentLevelData(level);
-      setShowLevelSelector(false);
+      setCurrentView('game');
     }
   };
   
+  // Niveau complété
   const handleLevelComplete = (stats) => {
     completeLevel(currentLevel, stats);
     checkBadges(badgesData.badges);
-    setShowLevelSelector(true);
+    setCurrentView('levels');
     setCurrentLevelData(null);
   };
   
+  // Retour au menu
   const handleBackToMenu = () => {
-    setShowLevelSelector(true);
+    setCurrentView('levels');
+    setCurrentLevelData(null);
+  };
+  
+  // Retour à l'accueil
+  const handleBackToHome = () => {
+    setCurrentView('welcome');
     setCurrentLevelData(null);
   };
   
   return (
     <div className="app">
-      <Toaster position="top-center" />
-      
-      <Header 
-        onMenuClick={() => setShowLevelSelector(true)}
-        currentLevel={currentLevelData?.id}
-        totalScore={totalScore}
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            borderRadius: 'var(--radius-lg)',
+            padding: 'var(--spacing-md)',
+          },
+        }}
       />
       
-      {showLevelSelector && (
-        <LevelSelector
-          levels={levelsData.levels}
-          onSelectLevel={handleSelectLevel}
-          onClose={() => currentLevelData && setShowLevelSelector(false)}
+      {/* Header - visible partout sauf sur la page d'accueil */}
+      {currentView !== 'welcome' && (
+        <Header 
+          onMenuClick={handleBackToHome}
+          currentLevel={currentLevelData?.id}
+          totalScore={totalScore}
         />
       )}
       
-      {currentLevelData && !showLevelSelector && (
-        <Game
-          levelData={currentLevelData}
-          onLevelComplete={handleLevelComplete}
-          onBackToMenu={handleBackToMenu}
-        />
-      )}
-      
-      {!showLevelSelector && !currentLevelData && (
-        <div className="welcome-screen">
-          <div className="welcome-content">
-            <h1 className="welcome-title">🎯 Bienvenue sur NIRD Crash!</h1>
-            <p className="welcome-description">
-              Un jeu éducatif pour découvrir les valeurs du NIRD à travers des mots, des énigmes et des défis !
-            </p>
-            <button 
-              className="btn btn-primary btn-large"
-              onClick={() => setShowLevelSelector(true)}
-            >
-              Commencer à jouer 🚀
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Navigation entre les vues */}
+      <AnimatePresence mode="wait">
+        {currentView === 'welcome' && (
+          <WelcomePage 
+            key="welcome"
+            onStartGame={handleStartGame}
+          />
+        )}
+        
+        {currentView === 'levels' && (
+          <LevelSelector
+            key="levels"
+            levels={levelsData.levels}
+            onSelectLevel={handleSelectLevel}
+            onClose={handleBackToHome}
+          />
+        )}
+        
+        {currentView === 'game' && currentLevelData && (
+          <Game
+            key={`game-${currentLevelData.id}`}
+            levelData={currentLevelData}
+            onLevelComplete={handleLevelComplete}
+            onBackToMenu={handleBackToMenu}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

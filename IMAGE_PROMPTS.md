@@ -220,7 +220,7 @@ Hands passing gift or resource, sharing concept, generosity illustration, warm c
    - Nommer de façon cohérente
 
 3. **Upload**:
-   - Uploader sur Cloudinary (voir CLOUDINARY_GUIDE.md)
+   - Placer dans `src/assets/images/` avec la structure appropriée
    - Organiser dans les dossiers appropriés
    - Copier les URLs
 

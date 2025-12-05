@@ -9,6 +9,7 @@ import RewardBar from '../ui/RewardBar';
 import ParticleSystem from '../effects/ParticleSystem';
 import FloatingPoints from '../effects/FloatingPoints';
 import messagesData from '../../data/messages.json';
+import Director from '../Director';
 import './Game.css';
 
 const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
@@ -17,6 +18,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
   const [showRiddleModal, setShowRiddleModal] = useState(false);
   const [riddleAnswer, setRiddleAnswer] = useState('');
   const [riddleSolved, setRiddleSolved] = useState(false);
+  const [directorEmotion, setDirectorEmotion] = useState('thinking');
   
   // Combo system
   const [combo, setCombo] = useState(0);
@@ -83,11 +85,35 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     }, 2500);
   }, []);
   
+  const handleLevelComplete = useCallback(() => {
+    const finalStars = calculateStars(foundWords.length, levelData.words.length);
+    
+    toast.success(`🎉 Niveau complété avec ${finalStars} étoile${finalStars > 1 ? 's' : ''} !`, {
+      duration: 3000,
+      style: {
+        background: 'linear-gradient(135deg, #FF6B6B 0%, #FFD93D 100%)',
+        color: '#fff',
+        fontSize: '1.1rem',
+        fontWeight: 'bold',
+      }
+    });
+    
+    setTimeout(() => {
+      onLevelComplete({
+        score: currentScore,
+        wordsFound: foundWords,
+        stars: finalStars,
+        riddleSolved: riddleSolved
+      });
+    }, 3000);
+  }, [foundWords.length, levelData.words.length, currentScore, foundWords, riddleSolved, calculateStars, onLevelComplete]);
+
   const handleWordFormed = useCallback((word, position) => {
     const normalizedWord = word.toUpperCase().trim();
     
     // Vérifie si le mot est déjà trouvé
     if (foundWords.includes(normalizedWord)) {
+      setDirectorEmotion('thinking');
       toast('Vous avez déjà trouvé ce mot ! 🔄', {
         icon: '⚠️',
         duration: 1500,
@@ -103,6 +129,8 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     const wordData = levelData.words.find(w => w.word === normalizedWord);
     
     if (!wordData) {
+      setDirectorEmotion('sad');
+      setTimeout(() => setDirectorEmotion('thinking'), 2000);
       toast.error('Ce mot n\'est pas dans la liste ! 😕', {
         duration: 1500,
       });
@@ -141,6 +169,8 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     addFoundWord(normalizedWord, wordData.points * currentCombo);
     setCurrentWordData(wordData);
     setShowPopup(true);
+    setDirectorEmotion('happy');
+    setTimeout(() => setDirectorEmotion('thinking'), 3000);
     
     // Message motivationnel avec info combo
     const randomMessage = messagesData.messages[
@@ -170,28 +200,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     return { success: true, combo: currentCombo };
   }, [foundWords, levelData.words, levelData.requiredWords, combo, addFoundWord, showFloatingPointsEffect, handleLevelComplete]);
   
-  const handleLevelComplete = useCallback(() => {
-    const finalStars = calculateStars(foundWords.length, levelData.words.length);
-    
-    toast.success(`🎉 Niveau complété avec ${finalStars} étoile${finalStars > 1 ? 's' : ''} !`, {
-      duration: 3000,
-      style: {
-        background: 'linear-gradient(135deg, #FF6B6B 0%, #FFD93D 100%)',
-        color: '#fff',
-        fontSize: '1.1rem',
-        fontWeight: 'bold',
-      }
-    });
-    
-    setTimeout(() => {
-      onLevelComplete({
-        score: currentScore,
-        wordsFound: foundWords,
-        stars: finalStars,
-        riddleSolved: riddleSolved
-      });
-    }, 3000);
-  }, [foundWords.length, levelData.words.length, currentScore, foundWords, riddleSolved, calculateStars, onLevelComplete]);
+
   
   const handleRiddleSubmit = useCallback(() => {
     const normalizedAnswer = riddleAnswer.toUpperCase().trim();
@@ -277,6 +286,9 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
         
         <div className="game-main">
           <div className="game-left">
+            <div className="director-container">
+              <Director emotion={directorEmotion} />
+            </div>
             <WordList 
               levelWords={levelData.words}
               foundWords={foundWords}

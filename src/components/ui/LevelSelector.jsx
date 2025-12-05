@@ -41,6 +41,11 @@ const LevelSelector = ({ levels, onSelectLevel, onClose }) => {
   
   return (
     <div className="level-selector-overlay" onClick={onClose}>
+      <div className="level-selector-back-button">
+        <button onClick={onClose} className="btn-back-to-home">
+          ← Retour à l'accueil
+        </button>
+      </div>
       <motion.div 
         className="level-selector-map-container"
         initial={{ opacity: 0, scale: 0.95 }}
