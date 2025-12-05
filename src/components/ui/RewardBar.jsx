@@ -3,7 +3,7 @@ import useGameStore from '../../store/gameStore';
 import './RewardBar.css';
 
 const RewardBar = ({ currentScore, targetScore, stars }) => {
-  const { totalScore, totalWordFound } = useGameStore();
+  const { totalScore } = useGameStore();
   
   const progressPercentage = Math.min((currentScore / targetScore) * 100, 100);
   

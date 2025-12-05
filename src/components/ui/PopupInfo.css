@@ -14,39 +14,54 @@
 }
 
 .popup-content {
-  background: var(--light);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-xl);
-  max-width: 600px;
+  background: var(--background-elevated);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-2xl);
+  max-width: 650px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--border-light);
   position: relative;
+  overflow: hidden;
+}
+
+.popup-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
 }
 
 .popup-close {
   position: absolute;
-  top: var(--spacing-md);
-  right: var(--spacing-md);
-  width: 40px;
-  height: 40px;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: var(--background);
+  background: var(--background-hover);
   color: var(--text);
   font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all var(--transition-base);
-  border: none;
+  border: 2px solid var(--border);
   cursor: pointer;
+  z-index: 10;
 }
 
 .popup-close:hover {
   background: var(--primary);
   color: var(--light);
-  transform: rotate(90deg);
+  border-color: var(--primary);
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: var(--shadow-md);
 }
 
 .popup-header {
@@ -92,9 +107,32 @@
 
 .popup-explanation {
   background: var(--gradient-secondary);
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
   margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.popup-explanation::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .popup-explanation p {
