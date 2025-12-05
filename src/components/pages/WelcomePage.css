@@ -22,7 +22,7 @@
   right: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(42, 82, 152, 0.15) 0%, rgba(30, 60, 114, 0.1) 50%, transparent 70%);
   animation: float 20s ease-in-out infinite;
 }
 
@@ -49,7 +49,7 @@
 .hero-title {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 6vw, 4.5rem);
-  background: var(--gradient-primary);
+  background: var(--gradient-secondary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -72,6 +72,7 @@
   align-items: center;
   gap: var(--spacing-md);
   box-shadow: var(--shadow-lg);
+  background: var(--gradient-secondary);
 }
 
 /* Video Section */
@@ -117,7 +118,7 @@
 
 .video-placeholder {
   aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  background: var(--gradient-secondary);
   border-radius: var(--radius-xl);
   display: flex;
   align-items: center;
@@ -218,7 +219,7 @@
   padding: var(--spacing-md);
   background: var(--background);
   border-radius: var(--radius-lg);
-  border-left: 4px solid var(--primary);
+  border-left: 4px solid var(--action-secondary);
   transition: all var(--transition-base);
 }
 
@@ -263,7 +264,7 @@
 
 .feature-card:hover {
   box-shadow: var(--shadow-xl);
-  border-color: var(--primary);
+  border-color: var(--action-secondary);
 }
 
 .feature-icon {
@@ -273,7 +274,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gradient-primary);
+  background: var(--gradient-secondary);
   border-radius: 50%;
   color: var(--light);
   box-shadow: var(--shadow-md);
@@ -295,7 +296,7 @@
 /* CTA Section */
 .welcome-cta {
   padding: var(--spacing-3xl) var(--spacing-md);
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  background: var(--gradient-secondary);
   color: var(--light);
   text-align: center;
 }
@@ -321,7 +322,7 @@
 
 .btn-cta {
   background: var(--light);
-  color: var(--primary);
+  color: var(--action-secondary);
   font-size: 1.25rem;
   padding: var(--spacing-lg) var(--spacing-2xl);
   box-shadow: var(--shadow-xl);

@@ -67,11 +67,6 @@ const LevelSelector = ({ levels, onSelectLevel, onClose }) => {
   
   return (
     <div className="level-selector-overlay" onClick={onClose}>
-      <div className="level-selector-back-button">
-        <button onClick={onClose} className="btn-back-to-home">
-          ← Retour à l'accueil
-        </button>
-      </div>
       <motion.div 
         className="level-selector-map-container"
         initial={{ opacity: 0, scale: 0.95 }}
@@ -139,20 +134,26 @@ const LevelSelector = ({ levels, onSelectLevel, onClose }) => {
                         borderColor: section.color,
                       }}
                       onClick={() => setSelectedSection(section)}
-                      initial={{ scale: 0, opacity: 0 }}
+                      initial={{ scale: 0, opacity: 0, rotate: -180 }}
                       animate={{ 
                         scale: 1, 
                         opacity: 1,
+                        rotate: 0,
                       }}
                       transition={{ 
-                        delay: index * 0.1,
+                        delay: index * 0.08,
                         type: 'spring',
-                        stiffness: 200
+                        stiffness: 300,
+                        damping: 20
                       }}
                       whileHover={{ 
-                        scale: 1.15, 
+                        scale: 1.25, 
                         zIndex: 100,
-                        transition: { duration: 0.2 }
+                        rotate: [0, -5, 5, 0],
+                        transition: { 
+                          duration: 0.3,
+                          rotate: { duration: 0.5, repeat: Infinity, repeatType: "reverse" }
+                        }
                       }}
                     >
                       {/* Icône de la section */}
@@ -163,9 +164,12 @@ const LevelSelector = ({ levels, onSelectLevel, onClose }) => {
                         {section.icon}
                       </div>
                       
-                      {/* Tooltip au survol */}
+                      {/* Tooltip au survol - affiche le titre et sous-titre */}
                       <div className="section-tooltip">
                         <div className="tooltip-title">{section.title}</div>
+                        {section.subtitle && (
+                          <div className="tooltip-subtitle">{section.subtitle}</div>
+                        )}
                       </div>
                     </motion.div>
                   );
@@ -207,20 +211,23 @@ const LevelSelector = ({ levels, onSelectLevel, onClose }) => {
                         borderColor: getLevelColor(level.theme),
                       }}
                       onClick={() => onSelectLevel(level.id)}
-                      initial={{ scale: 0, opacity: 0 }}
+                      initial={{ scale: 0, opacity: 0, y: 20 }}
                       animate={{ 
                         scale: 1, 
                         opacity: 1,
+                        y: 0,
                       }}
                       transition={{ 
-                        delay: index * 0.1,
+                        delay: index * 0.08,
                         type: 'spring',
-                        stiffness: 200
+                        stiffness: 300,
+                        damping: 20
                       }}
                       whileHover={{ 
                         scale: 1.2, 
                         zIndex: 100,
-                        transition: { duration: 0.2 }
+                        y: -5,
+                        transition: { duration: 0.3 }
                       }}
                     >
                       {/* Numéro du niveau */}
@@ -296,9 +303,36 @@ const LevelSelector = ({ levels, onSelectLevel, onClose }) => {
                 
                 <div className="section-modal-body">
                   <div className="section-content">
-                    {selectedSection.content.split('\n').map((line, i) => (
-                      <p key={i} className="section-content-line">{line}</p>
-                    ))}
+                    {selectedSection.content.split('\n').map((line, i) => {
+                      // Détecte les liens dans le contenu
+                      const urlRegex = /(https?:\/\/[^\s]+)/g;
+                      const parts = line.split(urlRegex);
+                      
+                      return (
+                        <p key={i} className="section-content-line">
+                          {parts.map((part, j) => {
+                            if (part.match(urlRegex)) {
+                              return (
+                                <a
+                                  key={j}
+                                  href={part}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{ 
+                                    color: selectedSection.color,
+                                    textDecoration: 'underline',
+                                    fontWeight: '600'
+                                  }}
+                                >
+                                  {part}
+                                </a>
+                              );
+                            }
+                            return <span key={j}>{part}</span>;
+                          })}
+                        </p>
+                      );
+                    })}
                   </div>
                   
                   {selectedSection.solution && (

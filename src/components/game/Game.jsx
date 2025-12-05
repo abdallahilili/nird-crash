@@ -35,6 +35,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
   
   // Système de questions avec lettres intermittentes
   const [currentLetterQuiz, setCurrentLetterQuiz] = useState(null);
+  const [showNextQuizButton, setShowNextQuizButton] = useState(false);
   
   // Combo system
   const [combo, setCombo] = useState(0);
@@ -59,26 +60,21 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
   
   const stars = calculateStars(foundWords.length, levelData.words.length);
   
-  useEffect(() => {
-    // Reset level state when level changes
-    resetLevel();
-    setCombo(0);
-    setLastWordTime(null);
-    lastWordTimeRef.current = null;
+  // Fonction pour charger une nouvelle question aléatoire
+  const loadNewQuestion = useCallback(() => {
+    // Charge TOUTES les questions (pas seulement celles du niveau)
+    const allLetterQuestions = letterQuizQuestionsData.questions;
+    const allCompletionQuestions = quizQuestionsData.questions;
     
-    // Charge une question aléatoire pour ce niveau (priorité aux questions avec lettres)
-    const levelLetterQuestions = letterQuizQuestionsData.questions.filter(q => q.levelId === levelData.id);
-    const levelCompletionQuestions = quizQuestionsData.questions.filter(q => q.levelId === levelData.id);
+    // Mélange aléatoire : 50% de chance d'avoir une question avec lettres, 50% une question à compléter
+    const useLetterQuiz = Math.random() < 0.5 && allLetterQuestions.length > 0;
     
-    // 50% de chance d'avoir une question avec lettres, 50% une question à compléter
-    const useLetterQuiz = Math.random() < 0.5 && levelLetterQuestions.length > 0;
-    
-    if (useLetterQuiz && levelLetterQuestions.length > 0) {
-      const randomLetterQuestion = levelLetterQuestions[Math.floor(Math.random() * levelLetterQuestions.length)];
+    if (useLetterQuiz && allLetterQuestions.length > 0) {
+      const randomLetterQuestion = allLetterQuestions[Math.floor(Math.random() * allLetterQuestions.length)];
       setCurrentLetterQuiz(randomLetterQuestion);
       setCurrentQuizQuestion(null);
-    } else if (levelCompletionQuestions.length > 0) {
-      const randomQuestion = levelCompletionQuestions[Math.floor(Math.random() * levelCompletionQuestions.length)];
+    } else if (allCompletionQuestions.length > 0) {
+      const randomQuestion = allCompletionQuestions[Math.floor(Math.random() * allCompletionQuestions.length)];
       setCurrentQuizQuestion(randomQuestion);
       setCurrentLetterQuiz(null);
     } else {
@@ -89,7 +85,29 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     setSelectedAnswer(null);
     setIsQuestionAnswered(false);
     setShowQuestionResult(false);
-  }, [levelData.id, resetLevel]);
+    setShowNextQuizButton(false);
+  }, []);
+
+  useEffect(() => {
+    // Reset level state when level changes
+    resetLevel();
+    setCombo(0);
+    setLastWordTime(null);
+    lastWordTimeRef.current = null;
+    
+    // Charge une question aléatoire
+    loadNewQuestion();
+  }, [levelData.id, resetLevel, loadNewQuestion]);
+
+  // Affiche le bouton "Quiz suivant" après qu'une question soit répondue
+  useEffect(() => {
+    if (isQuestionAnswered) {
+      const timer = setTimeout(() => {
+        setShowNextQuizButton(true);
+      }, 2000); // Affiche après 2 secondes
+      return () => clearTimeout(timer);
+    }
+  }, [isQuestionAnswered]);
   
   // Combo timer - reset combo after 5 seconds of inactivity
   useEffect(() => {
@@ -387,6 +405,11 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
       });
     }
   }, [currentLetterQuiz, isQuestionAnswered, addFoundWord]);
+
+  // Gestion du passage au quiz suivant
+  const handleNextQuiz = useCallback(() => {
+    loadNewQuestion();
+  }, [loadNewQuestion]);
   
   return (
     <div 
@@ -451,6 +474,23 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
                   isAnswered={isQuestionAnswered}
                   showResult={showQuestionResult}
                 />
+                {/* Bouton Quiz suivant */}
+                <AnimatePresence>
+                  {showNextQuizButton && (
+                    <motion.button
+                      className="btn-next-quiz"
+                      onClick={handleNextQuiz}
+                      initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.8 }}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <span>Quiz suivant →</span>
+                    </motion.button>
+                  )}
+                </AnimatePresence>
               </div>
             ) : currentQuizQuestion ? (
               /* Question à compléter basée sur les informations éducatives */
@@ -462,6 +502,23 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
                   selectedAnswer={selectedAnswer}
                   showResult={showQuestionResult}
                 />
+                {/* Bouton Quiz suivant */}
+                <AnimatePresence>
+                  {showNextQuizButton && (
+                    <motion.button
+                      className="btn-next-quiz"
+                      onClick={handleNextQuiz}
+                      initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.8 }}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <span>Quiz suivant →</span>
+                    </motion.button>
+                  )}
+                </AnimatePresence>
               </div>
             ) : (
               <LetterGrid 

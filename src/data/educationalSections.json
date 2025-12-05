@@ -4,6 +4,7 @@
       "id": 1,
       "icon": "1️⃣",
       "title": "Pourquoi agir ?",
+      "subtitle": "L'urgence du numérique responsable",
       "content": "Windows 10 ne sera plus mis à jour → risque de jeter des milliers d'ordinateurs encore fonctionnels.",
       "solution": "👉 Solution : le numérique responsable pour économiser, réutiliser et protéger la planète.",
       "color": "#FF6B6B"
@@ -12,6 +13,7 @@
       "id": 2,
       "icon": "2️⃣",
       "title": "Qu'est-ce que NIRD ?",
+      "subtitle": "Un collectif pour le numérique scolaire",
       "content": "Un groupe qui rassemble enseignants, élèves, techniciens et collectivités pour un numérique scolaire Inclusif, Responsable et Durable.",
       "solution": "",
       "color": "#4ECDC4"
@@ -20,6 +22,7 @@
       "id": 3,
       "icon": "3️⃣",
       "title": "Les 3 piliers de NIRD",
+      "subtitle": "Inclusion, Responsabilité, Durabilité",
       "content": "✅ Inclusion : outils accessibles à tous.\n✅ Responsabilité : solutions transparentes et respectueuses.\n✅ Durabilité : allonger la vie du matériel, réduire les déchets.",
       "solution": "",
       "color": "#9B59B6"
@@ -28,6 +31,7 @@
       "id": 4,
       "icon": "4️⃣",
       "title": "Concrètement, que fait NIRD ?",
+      "subtitle": "Actions concrètes sur le terrain",
       "content": "Sensibilise, installe Linux, partage des ressources libres, reconditionne le matériel, accompagne les écoles.",
       "solution": "",
       "color": "#F39C12"
@@ -36,6 +40,7 @@
       "id": 5,
       "icon": "5️⃣",
       "title": "Qui peut agir ?",
+      "subtitle": "Tous les acteurs du numérique éducatif",
       "content": "🎒 Élèves\n👩🏫 Enseignants\n💻 Techniciens\n🏛️ Collectivités",
       "solution": "→ Tout le monde peut contribuer !",
       "color": "#27AE60"
@@ -44,7 +49,8 @@
       "id": 6,
       "icon": "6️⃣",
       "title": "Comment rejoindre NIRD ?",
-      "content": "🔍 Visitez le site\n🤝 Participez à des ateliers\n🛠️ Testez Linux\n📢 Partagez vos solutions",
+      "subtitle": "Rejoignez la communauté",
+      "content": "🔍 Visitez le site : https://nird.forge.apps.education.fr/\n🤝 Participez à des ateliers\n🛠️ Testez Linux\n📢 Partagez vos solutions",
       "solution": "",
       "color": "#2ECC71"
     },
@@ -52,6 +58,7 @@
       "id": 7,
       "icon": "7️⃣",
       "title": "Exemple inspirant",
+      "subtitle": "Le lycée Carnot, un modèle",
       "content": "Au lycée Carnot, ils utilisent Linux et du matériel reconditionné → économies, moins de déchets, plus d'autonomie.",
       "solution": "",
       "color": "#E91E63"
@@ -60,6 +67,7 @@
       "id": 8,
       "icon": "8️⃣",
       "title": "Pourquoi les logiciels libres ?",
+      "subtitle": "Liberté, gratuité, durabilité",
       "content": "Gratuits, modifiables, durables → pas de licences chères, pas d'obsolescence programmée, pas de dépendance aux Big Tech.",
       "solution": "",
       "color": "#3498DB"
