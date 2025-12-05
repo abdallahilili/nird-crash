@@ -3,6 +3,68 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+}
+
+.director-display-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 450px;
+  height: 450px;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
+  border: 2px dashed rgba(255, 107, 107, 0.3);
+  border-radius: var(--radius-lg);
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-lg);
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* Debug: rendre le container visible */
+.director-display-container::after {
+  content: '🎭 Director Animation';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--text-light);
+  opacity: 0.5;
+  z-index: 10;
+}
+
+.director-display-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 215, 61, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Assure que le Director est visible */
+.director-display-container > div {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 300px;
+  min-height: 300px;
+  position: relative;
+  z-index: 2;
+}
+
+.director-display-container svg {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 300px;
+  min-height: 300px;
+  max-width: 400px;
+  max-height: 400px;
 }
 
 .word-list-title {
@@ -11,6 +73,31 @@
   margin-bottom: var(--spacing-md);
   text-align: center;
   font-size: 1.25rem;
+}
+
+.question-container {
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--primary);
+}
+
+.question-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: var(--spacing-sm);
+  text-align: left;
+  line-height: 1.5;
+}
+
+.question-hint {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  font-style: italic;
+  text-align: left;
+  margin-top: var(--spacing-xs);
 }
 
 .word-list {

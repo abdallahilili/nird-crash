@@ -1,64 +1,41 @@
 import { motion } from 'framer-motion';
+import Director from '../Director';
 import './WordList.css';
 import './WordList-animations.css';
 
-const WordList = ({ levelWords, foundWords }) => {
+const WordList = ({ levelWords, foundWords, levelId, directorEmotion, directorReaction }) => {
+
   return (
     <div className="word-list-container">
-      <h3 className="word-list-title">
-        Mots trouvés: {foundWords.length} / {levelWords.length}
-      </h3>
+      {/* Personnage SVG animé Director - REMPLACE LA LISTE DE MOTS */}
+      <motion.div
+        className="director-display-container"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, type: "spring" }}
+        style={{ 
+          width: '100%',
+          height: '450px',
+          minHeight: '450px',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)'
+        }}
+      >
+        <div style={{ 
+          width: '100%', 
+          height: '100%', 
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Director 
+            emotion={directorEmotion || 'thinking'} 
+            reaction={directorReaction} 
+          />
+        </div>
+      </motion.div>
       
-      <div className="word-list">
-        {levelWords.map((wordData, index) => {
-          const isFound = foundWords.includes(wordData.word);
-          
-          return (
-            <motion.div
-              key={index}
-              className={`word-item ${isFound ? 'found' : ''}`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ 
-                opacity: 1, 
-                x: 0,
-                scale: isFound ? [1, 1.1, 1] : 1
-              }}
-              transition={{ 
-                delay: index * 0.05,
-                scale: { duration: 0.3 }
-              }}
-            >
-              {isFound ? (
-                <motion.div
-                  className="word-found"
-                  initial={{ rotateY: 180 }}
-                  animate={{ rotateY: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                >
-                  <span className="word-check">✓</span>
-                  <span className="word-text">{wordData.word}</span>
-                  <motion.span 
-                    className="word-points"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.4, type: "spring" }}
-                  >
-                    {wordData.points}pts
-                  </motion.span>
-                </motion.div>
-              ) : (
-                <>
-                  <span className="word-hint">
-                    {wordData.word.substring(0, 2)}{'_'.repeat(wordData.word.length - 2)}
-                  </span>
-                  <span className="word-points-hidden">{wordData.points}pts</span>
-                </>
-              )}
-            </motion.div>
-          );
-        })}
-      </div>
-      
+      {/* Barre de progression en bas */}
       <div className="word-list-progress">
         <div className="progress-bar">
           <motion.div 

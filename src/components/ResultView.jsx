@@ -3,13 +3,19 @@ import { motion, useSpring, useTransform } from 'framer-motion';
 import { RotateCcw, TrendingUp, TrendingDown, Wallet, ListChecks, ArrowRight, Globe, Cpu } from 'lucide-react';
 import Confetti from 'react-confetti';
 
-const ResultView = ({ choice, onReset }) => {
+const ResultView = ({ choice, onReset, reaction = null }) => {
   const isSuccess = choice.type === 'opensource';
   // Track window size for correct confetti positioning
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [showReaction, setShowReaction] = useState(false);
   
-  // Animated number logic
-  const springValue = useSpring(0, { stiffness: 40, damping: 20, delay: 0.5 });
+  // Animated number logic avec animation plus dynamique
+  const springValue = useSpring(0, { 
+    stiffness: 40, 
+    damping: 20, 
+    delay: 0.5,
+    velocity: isSuccess ? 10 : 5
+  });
   const displayValue = useTransform(springValue, (current) => Math.round(current).toLocaleString());
 
   useEffect(() => {
@@ -17,11 +23,16 @@ const ResultView = ({ choice, onReset }) => {
     const handleResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     window.addEventListener('resize', handleResize);
     
-    // Animate number
+    // Animate number avec effet de rebond
     springValue.set(Math.abs(choice.cost));
+    
+    // Affiche la réaction après un court délai
+    if (reaction) {
+      setTimeout(() => setShowReaction(true), 1000);
+    }
 
     return () => window.removeEventListener('resize', handleResize);
-  }, [choice.cost, springValue]);
+  }, [choice.cost, springValue, reaction]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full relative">
@@ -39,13 +50,52 @@ const ResultView = ({ choice, onReset }) => {
       )}
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, type: 'spring', bounce: 0.4 }}
-        className="bg-white/95 backdrop-blur-md p-5 md:p-8 rounded-3xl shadow-2xl max-w-xl w-full text-center border border-white/50 relative overflow-hidden"
+        initial={{ opacity: 0, scale: 0.8, rotateY: -20 }}
+        animate={{ 
+          opacity: 1, 
+          scale: 1, 
+          rotateY: 0,
+          boxShadow: isSuccess ? 
+            "0 25px 50px -12px rgba(34, 197, 94, 0.5)" :
+            "0 25px 50px -12px rgba(239, 68, 68, 0.5)"
+        }}
+        transition={{ 
+          duration: 0.6, 
+          type: 'spring', 
+          bounce: 0.4,
+          boxShadow: { duration: 1, repeat: Infinity, repeatType: "reverse" }
+        }}
+        className={`bg-white/95 backdrop-blur-md p-5 md:p-8 rounded-3xl shadow-2xl max-w-xl w-full text-center border-2 relative overflow-hidden ${
+          isSuccess ? 'border-green-500/50' : 'border-red-500/50'
+        }`}
       >
-        {/* Decorative background blob */}
-        <div className={`absolute -top-20 -left-20 w-40 h-40 rounded-full blur-3xl opacity-20 ${isSuccess ? 'bg-green-500' : 'bg-red-500'}`}></div>
+        {/* Decorative background blob avec animation */}
+        <motion.div 
+          className={`absolute -top-20 -left-20 w-40 h-40 rounded-full blur-3xl opacity-20 ${isSuccess ? 'bg-green-500' : 'bg-red-500'}`}
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.3, 0.2],
+            x: [0, 20, 0],
+            y: [0, 20, 0]
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        {/* Réaction animée */}
+        {showReaction && reaction && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            className="absolute top-4 right-4 text-4xl z-20"
+          >
+            {reaction === 'correct' ? '🎉' : reaction === 'incorrect' ? '😔' : '🤔'}
+          </motion.div>
+        )}
 
         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800 relative z-10">
           Bilan de la décision

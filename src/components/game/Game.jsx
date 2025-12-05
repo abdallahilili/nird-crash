@@ -4,21 +4,37 @@ import toast, { Toaster } from 'react-hot-toast';
 import useGameStore from '../../store/gameStore';
 import LetterGrid from './LetterGrid';
 import WordList from './WordList';
+import QuestionCard from './QuestionCard';
+import LetterQuizCard from './LetterQuizCard';
 import PopupInfo from '../ui/PopupInfo';
 import RewardBar from '../ui/RewardBar';
 import ParticleSystem from '../effects/ParticleSystem';
 import FloatingPoints from '../effects/FloatingPoints';
 import messagesData from '../../data/messages.json';
+import questionsData from '../../data/questions.json';
+import quizQuestionsData from '../../data/quizQuestions.json';
+import letterQuizQuestionsData from '../../data/letterQuizQuestions.json';
 import Director from '../Director';
+import Mentor from '../Mentor';
 import './Game.css';
 
 const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [currentWordData, setCurrentWordData] = useState(null);
-  const [showRiddleModal, setShowRiddleModal] = useState(false);
-  const [riddleAnswer, setRiddleAnswer] = useState('');
-  const [riddleSolved, setRiddleSolved] = useState(false);
   const [directorEmotion, setDirectorEmotion] = useState('thinking');
+  const [directorReaction, setDirectorReaction] = useState(null);
+  const [showMentor, setShowMentor] = useState(false);
+  const [mentorMessage, setMentorMessage] = useState('');
+  const [mentorEmotion, setMentorEmotion] = useState('happy');
+  
+  // Système de questions vrai/faux et à compléter
+  const [currentQuizQuestion, setCurrentQuizQuestion] = useState(null);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
+  const [showQuestionResult, setShowQuestionResult] = useState(false);
+  
+  // Système de questions avec lettres intermittentes
+  const [currentLetterQuiz, setCurrentLetterQuiz] = useState(null);
   
   // Combo system
   const [combo, setCombo] = useState(0);
@@ -37,8 +53,6 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     foundWords,
     currentScore,
     addFoundWord,
-    solveRiddle,
-    riddlesSolved,
     calculateStars,
     resetLevel
   } = useGameStore();
@@ -48,11 +62,34 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
   useEffect(() => {
     // Reset level state when level changes
     resetLevel();
-    setRiddleSolved(riddlesSolved.includes(levelData.id));
     setCombo(0);
     setLastWordTime(null);
     lastWordTimeRef.current = null;
-  }, [levelData.id]);
+    
+    // Charge une question aléatoire pour ce niveau (priorité aux questions avec lettres)
+    const levelLetterQuestions = letterQuizQuestionsData.questions.filter(q => q.levelId === levelData.id);
+    const levelCompletionQuestions = quizQuestionsData.questions.filter(q => q.levelId === levelData.id);
+    
+    // 50% de chance d'avoir une question avec lettres, 50% une question à compléter
+    const useLetterQuiz = Math.random() < 0.5 && levelLetterQuestions.length > 0;
+    
+    if (useLetterQuiz && levelLetterQuestions.length > 0) {
+      const randomLetterQuestion = levelLetterQuestions[Math.floor(Math.random() * levelLetterQuestions.length)];
+      setCurrentLetterQuiz(randomLetterQuestion);
+      setCurrentQuizQuestion(null);
+    } else if (levelCompletionQuestions.length > 0) {
+      const randomQuestion = levelCompletionQuestions[Math.floor(Math.random() * levelCompletionQuestions.length)];
+      setCurrentQuizQuestion(randomQuestion);
+      setCurrentLetterQuiz(null);
+    } else {
+      setCurrentQuizQuestion(null);
+      setCurrentLetterQuiz(null);
+    }
+    
+    setSelectedAnswer(null);
+    setIsQuestionAnswered(false);
+    setShowQuestionResult(false);
+  }, [levelData.id, resetLevel]);
   
   // Combo timer - reset combo after 5 seconds of inactivity
   useEffect(() => {
@@ -103,10 +140,10 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
         score: currentScore,
         wordsFound: foundWords,
         stars: finalStars,
-        riddleSolved: riddleSolved
+        riddleSolved: false
       });
     }, 3000);
-  }, [foundWords.length, levelData.words.length, currentScore, foundWords, riddleSolved, calculateStars, onLevelComplete]);
+  }, [foundWords.length, levelData.words.length, currentScore, foundWords, calculateStars, onLevelComplete]);
 
   const handleWordFormed = useCallback((word, position) => {
     const normalizedWord = word.toUpperCase().trim();
@@ -114,6 +151,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     // Vérifie si le mot est déjà trouvé
     if (foundWords.includes(normalizedWord)) {
       setDirectorEmotion('thinking');
+      setDirectorReaction(null);
       toast('Vous avez déjà trouvé ce mot ! 🔄', {
         icon: '⚠️',
         duration: 1500,
@@ -129,8 +167,16 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     const wordData = levelData.words.find(w => w.word === normalizedWord);
     
     if (!wordData) {
+      setDirectorReaction('incorrect');
       setDirectorEmotion('sad');
-      setTimeout(() => setDirectorEmotion('thinking'), 2000);
+      setMentorEmotion('sad');
+      setMentorMessage('😔 Ce mot n\'est pas dans la liste ! Essayez encore.');
+      setShowMentor(true);
+      setTimeout(() => {
+        setDirectorReaction(null);
+        setDirectorEmotion('thinking');
+        setShowMentor(false);
+      }, 3000);
       toast.error('Ce mot n\'est pas dans la liste ! 😕', {
         duration: 1500,
       });
@@ -165,12 +211,55 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     // Affiche les points flottants avec multiplicateur de combo
     showFloatingPointsEffect(wordData.points * currentCombo, currentCombo, effectPosition);
     
+    // Vérifie si c'est une réponse à une question
+    const levelQuestions = questionsData.questions.filter(q => q.levelId === levelData.id);
+    let isCorrectAnswer = null;
+    let feedbackMessage = '';
+    
+    for (const question of levelQuestions) {
+      const answer = question.answers.find(a => a.word === normalizedWord);
+      if (answer) {
+        isCorrectAnswer = answer.isCorrect;
+        feedbackMessage = answer.feedback;
+        break;
+      }
+    }
+    
     // Mot valide trouvé !
     addFoundWord(normalizedWord, wordData.points * currentCombo);
     setCurrentWordData(wordData);
     setShowPopup(true);
-    setDirectorEmotion('happy');
-    setTimeout(() => setDirectorEmotion('thinking'), 3000);
+    
+    // Réaction du Director selon la réponse
+    if (isCorrectAnswer !== null) {
+      if (isCorrectAnswer) {
+        setDirectorReaction('correct');
+        setDirectorEmotion('happy');
+        setMentorEmotion('happy');
+        setMentorMessage(feedbackMessage || '🎉 Excellente réponse !');
+        setShowMentor(true);
+        setTimeout(() => {
+          setDirectorReaction(null);
+          setDirectorEmotion('thinking');
+          setShowMentor(false);
+        }, 4000);
+      } else {
+        setDirectorReaction('incorrect');
+        setDirectorEmotion('sad');
+        setMentorEmotion('sad');
+        setMentorMessage(feedbackMessage || '😔 Ce n\'est pas la bonne réponse, mais continuez !');
+        setShowMentor(true);
+        setTimeout(() => {
+          setDirectorReaction(null);
+          setDirectorEmotion('thinking');
+          setShowMentor(false);
+        }, 4000);
+      }
+    } else {
+      // Pas de question associée, réaction normale
+      setDirectorEmotion('happy');
+      setTimeout(() => setDirectorEmotion('thinking'), 3000);
+    }
     
     // Message motivationnel avec info combo
     const randomMessage = messagesData.messages[
@@ -202,30 +291,102 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
   
 
   
-  const handleRiddleSubmit = useCallback(() => {
-    const normalizedAnswer = riddleAnswer.toUpperCase().trim();
-    const correctAnswer = levelData.riddleAnswer.toUpperCase().trim();
+  // Gestion de la réponse à la question à compléter
+  const handleQuestionAnswer = useCallback((answer) => {
+    if (isQuestionAnswered || !currentQuizQuestion) return;
     
-    if (normalizedAnswer === correctAnswer) {
-      setRiddleSolved(true);
-      solveRiddle(levelData.id);
-      setShowRiddleModal(false);
-      setRiddleAnswer('');
-      toast.success('🎯 Bravo ! Énigme résolue ! +50 points bonus !', {
+    setSelectedAnswer(answer);
+    setIsQuestionAnswered(true);
+    setShowQuestionResult(true);
+    
+    const isCorrect = answer === currentQuizQuestion.correctOption;
+    
+    // Réaction du Director
+    if (isCorrect) {
+      setDirectorReaction('correct');
+      setDirectorEmotion('happy');
+      setMentorEmotion('happy');
+      setMentorMessage('🎉 Excellente réponse !');
+      setShowMentor(true);
+      addFoundWord('BONUS_QUESTION', 50);
+      setTimeout(() => {
+        setDirectorReaction(null);
+        setDirectorEmotion('thinking');
+        setShowMentor(false);
+      }, 4000);
+      
+      toast.success('✅ Bonne réponse ! +50 points !', {
         duration: 3000,
         style: {
-          background: 'linear-gradient(135deg, #9B59B6 0%, #E91E63 100%)',
+          background: 'linear-gradient(135deg, #6BCF7F 0%, #4CAF50 100%)',
           color: '#fff',
           fontWeight: 'bold',
         }
       });
-      addFoundWord('BONUS_RIDDLE', 50);
     } else {
-      toast.error('Pas tout à fait... Réessayez ! 🤔', {
+      setDirectorReaction('incorrect');
+      setDirectorEmotion('sad');
+      setMentorEmotion('sad');
+      setMentorMessage('😔 Ce n\'est pas la bonne réponse, mais continuez !');
+      setShowMentor(true);
+      setTimeout(() => {
+        setDirectorReaction(null);
+        setDirectorEmotion('thinking');
+        setShowMentor(false);
+      }, 4000);
+      
+      toast.error('❌ Mauvaise réponse', {
         duration: 2000,
       });
     }
-  }, [riddleAnswer, levelData.riddleAnswer, levelData.id, solveRiddle, addFoundWord]);
+  }, [currentQuizQuestion, isQuestionAnswered, addFoundWord]);
+
+  // Gestion de la réponse à la question avec lettres intermittentes
+  const handleLetterQuizAnswer = useCallback((isCorrect, answer) => {
+    if (isQuestionAnswered) return;
+    
+    setIsQuestionAnswered(true);
+    setShowQuestionResult(true);
+    
+    // Réaction du Director
+    if (isCorrect) {
+      setDirectorReaction('correct');
+      setDirectorEmotion('happy');
+      setMentorEmotion('happy');
+      setMentorMessage('🎉 Excellente réponse !');
+      setShowMentor(true);
+      addFoundWord('BONUS_LETTER_QUIZ', 75);
+      setTimeout(() => {
+        setDirectorReaction(null);
+        setDirectorEmotion('thinking');
+        setShowMentor(false);
+      }, 4000);
+      
+      toast.success(`✅ Bonne réponse ! ${answer} - +75 points !`, {
+        duration: 3000,
+        style: {
+          background: 'linear-gradient(135deg, #6BCF7F 0%, #4CAF50 100%)',
+          color: '#fff',
+          fontWeight: 'bold',
+        }
+      });
+    } else {
+      setDirectorReaction('incorrect');
+      setDirectorEmotion('sad');
+      setMentorEmotion('sad');
+      setMentorMessage(`La bonne réponse est : ${currentLetterQuiz.correctWord}`);
+      setShowMentor(true);
+      setTimeout(() => {
+        setDirectorReaction(null);
+        setDirectorEmotion('thinking');
+        setShowMentor(false);
+      }, 4000);
+      
+      toast.error(`❌ Mauvaise réponse. La bonne réponse est : ${currentLetterQuiz.correctWord}`, {
+        duration: 3000,
+      });
+    }
+  }, [currentLetterQuiz, isQuestionAnswered, addFoundWord]);
   
   return (
     <div 
@@ -250,32 +411,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
             >
               {levelData.title}
             </motion.h1>
-            <motion.p 
-              className="level-description"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              {levelData.description}
-            </motion.p>
-            
-            <motion.div 
-              className="level-story"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              📖 {levelData.story}
-            </motion.div>
           </div>
-          
-          <button 
-            className={`btn riddle-btn ${riddleSolved ? 'solved' : ''}`}
-            onClick={() => setShowRiddleModal(true)}
-            disabled={riddleSolved}
-          >
-            {riddleSolved ? '✓ Énigme résolue' : '🧩 Énigme'}
-          </button>
         </div>
         
         <RewardBar 
@@ -286,20 +422,53 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
         
         <div className="game-main">
           <div className="game-left">
-            <div className="director-container">
-              <Director emotion={directorEmotion} />
-            </div>
+            {/* Mentor avec réactions */}
+            <Mentor
+              message={mentorMessage}
+              isVisible={showMentor}
+              onClose={() => setShowMentor(false)}
+              emotion={mentorEmotion}
+              reaction={directorReaction}
+            />
+            
+            {/* WordList contient maintenant le Director SVG animé à la place de la liste de mots */}
             <WordList 
               levelWords={levelData.words}
               foundWords={foundWords}
+              levelId={levelData.id}
+              directorEmotion={directorEmotion}
+              directorReaction={directorReaction}
             />
           </div>
           
           <div className="game-center">
-            <LetterGrid 
-              gridLetters={levelData.gridLetters}
-              onWordFormed={handleWordFormed}
-            />
+            {/* Question avec lettres intermittentes */}
+            {currentLetterQuiz ? (
+              <div className="quiz-question-section">
+                <LetterQuizCard
+                  question={currentLetterQuiz}
+                  onAnswer={handleLetterQuizAnswer}
+                  isAnswered={isQuestionAnswered}
+                  showResult={showQuestionResult}
+                />
+              </div>
+            ) : currentQuizQuestion ? (
+              /* Question à compléter basée sur les informations éducatives */
+              <div className="quiz-question-section">
+                <QuestionCard
+                  question={currentQuizQuestion}
+                  onAnswer={handleQuestionAnswer}
+                  isAnswered={isQuestionAnswered}
+                  selectedAnswer={selectedAnswer}
+                  showResult={showQuestionResult}
+                />
+              </div>
+            ) : (
+              <LetterGrid 
+                gridLetters={levelData.gridLetters}
+                onWordFormed={handleWordFormed}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -339,47 +508,6 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
         />
       ))}
       
-      {/* Riddle Modal */}
-      <AnimatePresence>
-        {showRiddleModal && !riddleSolved && (
-          <motion.div 
-            className="riddle-modal-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setShowRiddleModal(false)}
-          >
-            <motion.div 
-              className="riddle-modal"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3>🧩 Énigme du niveau</h3>
-              <p className="riddle-text">{levelData.riddle}</p>
-              
-              <input
-                type="text"
-                className="riddle-input"
-                placeholder="Votre réponse..."
-                value={riddleAnswer}
-                onChange={(e) => setRiddleAnswer(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleRiddleSubmit()}
-              />
-              
-              <div className="riddle-actions">
-                <button className="btn btn-secondary" onClick={() => setShowRiddleModal(false)}>
-                  Annuler
-                </button>
-                <button className="btn btn-primary" onClick={handleRiddleSubmit}>
-                  Valider
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

@@ -2,28 +2,75 @@ import React, { useState, useEffect } from 'react';
 import { motion, useSpring, useTransform } from 'framer-motion';
 import { MousePointerClick } from 'lucide-react';
 
-const ChoiceCard = ({ choice, onClick }) => {
+const ChoiceCard = ({ choice, onClick, isSelected = false, reaction = null }) => {
   const isGood = choice.type === 'opensource';
   
-  // Animated Counter for Cost
-  const springValue = useSpring(0, { stiffness: 50, damping: 20 });
+  // Animated Counter for Cost avec animation plus dynamique
+  const springValue = useSpring(0, { 
+    stiffness: 50, 
+    damping: 20,
+    velocity: isGood ? 5 : 3
+  });
   const displayValue = useTransform(springValue, (current) => Math.round(current).toLocaleString());
 
   useEffect(() => {
-    // Animate from 0 to actual cost
+    // Animate from 0 to actual cost avec rebond
     springValue.set(Math.abs(choice.cost));
   }, [choice.cost, springValue]);
 
   return (
     <motion.button
-      whileHover={{ scale: 1.05, y: -5, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+      whileHover={{ 
+        scale: 1.05, 
+        y: -5, 
+        boxShadow: isGood ? 
+          "0 20px 25px -5px rgba(34, 197, 94, 0.3), 0 10px 10px -5px rgba(34, 197, 94, 0.2)" :
+          "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+      }}
       whileTap={{ scale: 0.98 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      initial={{ opacity: 0, y: 20, rotateX: -10 }}
+      animate={{ 
+        opacity: 1, 
+        y: 0, 
+        rotateX: 0,
+        borderColor: isSelected ? (isGood ? "#22c55e" : "#ef4444") : "#e5e7eb",
+        boxShadow: isSelected ? 
+          (isGood ? 
+            "0 0 0 3px rgba(34, 197, 94, 0.3)" : 
+            "0 0 0 3px rgba(239, 68, 68, 0.3)") :
+          "0 1px 3px 0 rgba(0, 0, 0, 0.1)"
+      }}
+      transition={{ 
+        type: "spring", 
+        stiffness: 300, 
+        damping: 20,
+        borderColor: { duration: 0.3 }
+      }}
       onClick={() => onClick(choice)}
-      className="relative overflow-hidden w-full p-5 md:p-6 rounded-2xl shadow-md border-2 border-gray-200 hover:border-[#00843D] text-left transition-all duration-300 flex flex-col h-full bg-white group"
+      className={`relative overflow-hidden w-full p-5 md:p-6 rounded-2xl shadow-md border-2 text-left transition-all duration-300 flex flex-col h-full bg-white group ${
+        isGood ? 'hover:border-green-500' : 'hover:border-gray-400'
+      } ${isSelected ? (isGood ? 'bg-green-50' : 'bg-red-50') : ''}`}
     >
+      {/* Effet de brillance au survol */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+        initial={{ x: '-100%' }}
+        whileHover={{ x: '100%' }}
+        transition={{ duration: 0.6 }}
+      />
+      
+      {/* Indicateur de réaction */}
+      {reaction && (
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          className={`absolute top-2 right-2 text-2xl z-10 ${
+            reaction === 'correct' ? 'animate-bounce' : 'animate-pulse'
+          }`}
+        >
+          {reaction === 'correct' ? '✅' : reaction === 'incorrect' ? '❌' : '🤔'}
+        </motion.div>
+      )}
       <div className="z-10 w-full">
         <div className={`inline-block px-2.5 py-1 rounded-full text-[10px] md:text-xs font-bold mb-2 md:mb-3 transition-colors ${isGood ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
           OPTION {isGood ? 'A' : 'B'}

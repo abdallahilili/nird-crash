@@ -94,6 +94,11 @@
   font-size: 1.2rem;
 }
 
+.quiz-question-section {
+  margin: var(--spacing-lg) 0;
+  width: 100%;
+}
+
 .game-main {
   display: grid;
   grid-template-columns: 340px 1fr;

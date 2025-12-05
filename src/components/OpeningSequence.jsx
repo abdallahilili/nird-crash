@@ -36,9 +36,23 @@ const OpeningSequence = ({ onComplete }) => {
   }, [act]);
 
   const containerVariants = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1, transition: { duration: 0.5 } },
-    exit: { opacity: 0, transition: { duration: 0.5 } }
+    initial: { opacity: 0, scale: 0.95 },
+    animate: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { 
+        duration: 0.5,
+        ease: "easeOut"
+      } 
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 1.05,
+      transition: { 
+        duration: 0.5,
+        ease: "easeIn"
+      } 
+    }
   };
 
   return (
@@ -62,8 +76,16 @@ const OpeningSequence = ({ onComplete }) => {
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-black to-black" />
                     
                     <motion.div 
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
-                        transition={{ repeat: Infinity, duration: 0.8 }}
+                        animate={{ 
+                          scale: [1, 1.2, 1], 
+                          opacity: [0.5, 1, 0.5],
+                          rotate: [0, 5, -5, 0]
+                        }} 
+                        transition={{ 
+                          repeat: Infinity, 
+                          duration: 0.8,
+                          ease: "easeInOut"
+                        }}
                     >
                         <AlertTriangle size={100} strokeWidth={1.5} />
                     </motion.div>
@@ -77,8 +99,18 @@ const OpeningSequence = ({ onComplete }) => {
                         </motion.h1>
                         <motion.div 
                             key={count}
-                            initial={{ scale: 1.5, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
+                            initial={{ scale: 1.5, opacity: 0, rotate: -10 }}
+                            animate={{ 
+                              scale: 1, 
+                              opacity: 1, 
+                              rotate: 0,
+                              color: count <= 3 ? "#ef4444" : count <= 6 ? "#f59e0b" : "#ffffff"
+                            }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 200,
+                              damping: 15
+                            }}
                             className="text-8xl md:text-9xl font-black font-mono text-white tabular-nums"
                         >
                             00:{count.toString().padStart(2, '0')}
@@ -146,11 +178,24 @@ const OpeningSequence = ({ onComplete }) => {
                         </div>
                     </motion.div>
 
-                    {/* VS Badge */}
+                    {/* VS Badge avec animation pulsante */}
                     <motion.div 
                         initial={{ scale: 0, rotate: -180 }} 
-                        animate={{ scale: 1, rotate: 0 }} 
-                        transition={{ delay: 0.5, type: 'spring' }}
+                        animate={{ 
+                          scale: [1, 1.1, 1],
+                          rotate: 0,
+                          boxShadow: [
+                            "0 0 50px rgba(255,255,255,0.5)",
+                            "0 0 80px rgba(255,255,255,0.8)",
+                            "0 0 50px rgba(255,255,255,0.5)"
+                          ]
+                        }} 
+                        transition={{ 
+                          delay: 0.5, 
+                          type: 'spring',
+                          scale: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
+                          boxShadow: { duration: 1.5, repeat: Infinity }
+                        }}
                         className="absolute inset-0 m-auto w-20 h-20 bg-white rounded-full flex items-center justify-center text-black font-black text-2xl z-20 shadow-[0_0_50px_rgba(255,255,255,0.5)] border-4 border-gray-100"
                     >
                         VS

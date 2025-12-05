@@ -1,0 +1,63 @@
+{
+  "questions": [
+    {
+      "levelId": 1,
+      "question": "Qu'est-ce que le NIRD ?",
+      "type": "definition",
+      "answers": [
+        {
+          "word": "NIRD",
+          "isCorrect": true,
+          "feedback": "Exactement ! Le NIRD est le Nouvel Institut de Recherche Digitale."
+        },
+        {
+          "word": "BULLSHIT",
+          "isCorrect": false,
+          "feedback": "Pas tout à fait, mais c'est un élément important de la culture NIRD !"
+        }
+      ]
+    },
+    {
+      "levelId": 1,
+      "question": "Quel est notre produit phare ?",
+      "type": "product",
+      "answers": [
+        {
+          "word": "PPT",
+          "isCorrect": true,
+          "feedback": "Oui ! Les PowerPoints sont notre spécialité."
+        }
+      ]
+    },
+    {
+      "levelId": 2,
+      "question": "Quelle est la meilleure alternative open source à Google Workspace ?",
+      "type": "comparison",
+      "answers": [
+        {
+          "word": "LIBREOFFICE",
+          "isCorrect": true,
+          "feedback": "Excellent choix ! LibreOffice est une alternative libre et gratuite."
+        },
+        {
+          "word": "GOOGLE",
+          "isCorrect": false,
+          "feedback": "Non, Google n'est pas open source. Cherchez une alternative libre !"
+        }
+      ]
+    },
+    {
+      "levelId": 2,
+      "question": "Quel navigateur open source est recommandé ?",
+      "type": "browser",
+      "answers": [
+        {
+          "word": "FIREFOX",
+          "isCorrect": true,
+          "feedback": "Parfait ! Firefox respecte votre vie privée."
+        }
+      ]
+    }
+  ]
+}
+

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Director = ({ emotion }) => {
+const Director = ({ emotion = 'thinking', reaction = null }) => {
   // Mauritanian Colors
   const colors = {
     skin: "#F5D0A9",
@@ -14,17 +14,38 @@ const Director = ({ emotion }) => {
     mauritanianRed: "#D01C1F",
   };
 
+  // Détermine l'émotion basée sur la réaction
+  const currentEmotion = reaction === 'correct' ? 'happy' : reaction === 'incorrect' ? 'sad' : emotion;
+
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
+    <div style={{ 
+      position: 'relative', 
+      width: '100%', 
+      height: '100%', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      minWidth: '300px',
+      minHeight: '300px'
+    }}>
       <svg
         viewBox="0 0 400 400"
-        className="w-full h-full max-w-[400px] max-h-[400px] drop-shadow-2xl"
+        style={{
+          width: '100%',
+          height: '100%',
+          maxWidth: '400px',
+          maxHeight: '400px',
+          minWidth: '300px',
+          minHeight: '300px',
+          filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3))'
+        }}
         xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid meet"
       >
         {/* --- BACKGROUND ELEMENTS --- */}
         
         {/* Happy Sun Rays */}
-        {emotion === 'happy' && (
+        {currentEmotion === 'happy' && (
           <motion.g
             initial={{ opacity: 0, scale: 0.5, rotate: 0 }}
             animate={{ opacity: 1, scale: 1.2, rotate: 360 }}
@@ -48,7 +69,7 @@ const Director = ({ emotion }) => {
         )}
 
         {/* Sad Storm Clouds */}
-        {emotion === 'sad' && (
+        {currentEmotion === 'sad' && (
           <motion.g
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -86,13 +107,32 @@ const Director = ({ emotion }) => {
             {/* Tie */}
             <path d="M200,220 L190,230 L200,260 L210,230 Z" fill={colors.tie} />
 
-            {/* Head */}
+            {/* Head avec animation de réaction */}
             <motion.ellipse 
                 cx="200" cy="150" rx="60" ry="70" 
                 fill={colors.skin} 
-                initial={{ y: 0 }}
-                animate={emotion === 'sad' ? { y: 15, rotate: 5 } : { y: 0, rotate: 0 }}
-                transition={{ type: "spring", stiffness: 50 }}
+                initial={{ y: 0, scale: 1 }}
+                animate={currentEmotion === 'sad' ? { 
+                  y: 15, 
+                  rotate: 5,
+                  scale: [1, 0.95, 1]
+                } : currentEmotion === 'happy' ? { 
+                  y: [-5, -10, -5], 
+                  rotate: [-2, 2, -2],
+                  scale: [1, 1.1, 1]
+                } : { 
+                  y: 0, 
+                  rotate: 0,
+                  scale: 1
+                }}
+                transition={{ 
+                  type: "spring", 
+                  stiffness: 100,
+                  damping: 10,
+                  scale: { duration: 0.5, repeat: currentEmotion === 'happy' ? Infinity : 0, repeatType: "reverse" },
+                  y: { duration: 1, repeat: currentEmotion === 'happy' ? Infinity : 0 },
+                  rotate: { duration: 1, repeat: currentEmotion === 'happy' ? Infinity : 0 }
+                }}
             />
 
             {/* Hair */}
@@ -102,7 +142,7 @@ const Director = ({ emotion }) => {
             {/* --- FACIAL FEATURES --- */}
 
             {/* Eyes: Thinking */}
-            {emotion === 'thinking' && (
+            {currentEmotion === 'thinking' && (
             <g>
                 <circle cx="180" cy="140" r="5" fill="#333" />
                 <circle cx="220" cy="140" r="5" fill="#333" />
@@ -112,7 +152,7 @@ const Director = ({ emotion }) => {
             )}
 
             {/* Eyes: Sad (X eyes or closed down) */}
-            {emotion === 'sad' && (
+            {currentEmotion === 'sad' && (
                 <g transform="translate(0, 15)">
                     <path d="M170,140 Q180,135 190,140" stroke="#333" strokeWidth="3" fill="none" />
                     <path d="M210,140 Q220,135 230,140" stroke="#333" strokeWidth="3" fill="none" />
@@ -126,36 +166,139 @@ const Director = ({ emotion }) => {
                 </g>
             )}
 
-            {/* Eyes: Happy (Arcs) */}
-            {emotion === 'happy' && (
+            {/* Eyes: Happy (Arcs) avec animation */}
+            {currentEmotion === 'happy' && (
             <g>
                 <motion.path 
-                    d="M170,145 Q180,130 190,145" stroke="#333" strokeWidth="3" fill="none" 
-                    initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5 }}
+                    d="M170,145 Q180,130 190,145" 
+                    stroke="#333" 
+                    strokeWidth="3" 
+                    fill="none" 
+                    initial={{ pathLength: 0, opacity: 0 }} 
+                    animate={{ 
+                      pathLength: 1, 
+                      opacity: 1,
+                      d: ["M170,145 Q180,130 190,145", "M170,143 Q180,128 190,143", "M170,145 Q180,130 190,145"]
+                    }} 
+                    transition={{ 
+                      pathLength: { duration: 0.5 },
+                      opacity: { duration: 0.3 },
+                      d: { duration: 1, repeat: Infinity, ease: "easeInOut" }
+                    }}
                 />
                 <motion.path 
-                    d="M210,145 Q220,130 230,145" stroke="#333" strokeWidth="3" fill="none" 
-                    initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5 }}
+                    d="M210,145 Q220,130 230,145" 
+                    stroke="#333" 
+                    strokeWidth="3" 
+                    fill="none" 
+                    initial={{ pathLength: 0, opacity: 0 }} 
+                    animate={{ 
+                      pathLength: 1, 
+                      opacity: 1,
+                      d: ["M210,145 Q220,130 230,145", "M210,143 Q220,128 230,143", "M210,145 Q220,130 230,145"]
+                    }} 
+                    transition={{ 
+                      pathLength: { duration: 0.5, delay: 0.1 },
+                      opacity: { duration: 0.3, delay: 0.1 },
+                      d: { duration: 1, repeat: Infinity, delay: 0.1, ease: "easeInOut" }
+                    }}
+                />
+                {/* Petites étoiles pour l'effet "yeux qui brillent" */}
+                <motion.circle
+                  cx="180"
+                  cy="135"
+                  r="2"
+                  fill="#FFD93D"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ 
+                    scale: [0, 1, 0],
+                    opacity: [0, 1, 0]
+                  }}
+                  transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
+                />
+                <motion.circle
+                  cx="220"
+                  cy="135"
+                  r="2"
+                  fill="#FFD93D"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ 
+                    scale: [0, 1, 0],
+                    opacity: [0, 1, 0]
+                  }}
+                  transition={{ duration: 1.5, repeat: Infinity, delay: 0.7 }}
                 />
             </g>
             )}
 
             {/* Mouth */}
-            {emotion === 'thinking' && (
-            <path d="M190,180 L210,180" stroke="#333" strokeWidth="2" />
+            {currentEmotion === 'thinking' && (
+            <motion.path 
+              d="M190,180 L210,180" 
+              stroke="#333" 
+              strokeWidth="2"
+              animate={{ d: ["M190,180 L210,180", "M190,180 Q200,185 210,180", "M190,180 L210,180"] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
             )}
-            {emotion === 'sad' && (
-            <path d="M180,185 Q200,165 220,185" stroke="#333" strokeWidth="3" fill="none" transform="translate(0, 15)" />
+            {currentEmotion === 'sad' && (
+            <motion.path 
+              d="M180,185 Q200,165 220,185" 
+              stroke="#333" 
+              strokeWidth="3" 
+              fill="none" 
+              transform="translate(0, 15)"
+              animate={{ d: ["M180,185 Q200,165 220,185", "M180,190 Q200,170 220,190", "M180,185 Q200,165 220,185"] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
             )}
-            {emotion === 'happy' && (
-            <path d="M180,170 Q200,200 220,170" fill="#FFF" stroke="#333" strokeWidth="1" />
+            {currentEmotion === 'happy' && (
+            <motion.g>
+              <motion.path 
+                d="M180,170 Q200,200 220,170" 
+                fill="#FFF" 
+                stroke="#333" 
+                strokeWidth="2"
+                animate={{ 
+                  d: ["M180,170 Q200,200 220,170", "M180,165 Q200,205 220,165", "M180,170 Q200,200 220,170"],
+                  stroke: ["#333", "#22c55e", "#333"]
+                }}
+                transition={{ 
+                  duration: 0.8, 
+                  repeat: Infinity,
+                  stroke: { duration: 1.5, repeat: Infinity }
+                }}
+              />
+              {/* Petites dents pour le sourire */}
+              {[185, 195, 205, 215].map((x, i) => (
+                <motion.rect
+                  key={i}
+                  x={x - 1}
+                  y={175}
+                  width="2"
+                  height="4"
+                  fill="#FFF"
+                  initial={{ scaleY: 0 }}
+                  animate={{ 
+                    scaleY: [0, 1, 0.8, 1],
+                    y: [175, 173, 175, 175]
+                  }}
+                  transition={{ 
+                    duration: 0.6,
+                    delay: i * 0.1,
+                    repeat: Infinity,
+                    repeatDelay: 2
+                  }}
+                />
+              ))}
+            </motion.g>
             )}
         </g>
 
         {/* --- ARMS & PROPS --- */}
 
         {/* Thinking Arm (Hand on chin) */}
-        {emotion === 'thinking' && (
+        {currentEmotion === 'thinking' && (
           <g transform="translate(0, 20)">
             <path d="M240,250 Q270,200 220,190" stroke={colors.suitDark} strokeWidth="20" strokeLinecap="round" fill="none" />
             <circle cx="220" cy="190" r="15" fill={colors.skin} />
@@ -175,7 +318,7 @@ const Director = ({ emotion }) => {
         )}
 
         {/* Sad Arms (Empty Pockets) */}
-        {emotion === 'sad' && (
+        {currentEmotion === 'sad' && (
           <g transform="translate(0, 20)">
             {/* Arms hanging down */}
             <path d="M120,230 Q90,300 110,350" stroke={colors.suitDark} strokeWidth="25" strokeLinecap="round" fill="none" />
@@ -212,7 +355,7 @@ const Director = ({ emotion }) => {
         )}
 
         {/* Happy Arms (Victory & Money Rain) */}
-        {emotion === 'happy' && (
+        {currentEmotion === 'happy' && (
           <g>
             <g transform="translate(0, 20)">
                 {/* Arms raised high */}

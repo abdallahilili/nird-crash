@@ -1,0 +1,296 @@
+.letter-quiz-card-container {
+  background: var(--background-elevated);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: var(--spacing-lg);
+  border: 2px solid var(--border-light);
+}
+
+.letter-quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.letter-quiz-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  font-family: var(--font-heading);
+}
+
+.letter-quiz-source {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  background: var(--background);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.letter-quiz-question {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--text);
+  margin-bottom: var(--spacing-xl);
+  font-weight: 500;
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--primary);
+}
+
+/* Affichage du mot */
+.word-display-container {
+  margin-bottom: var(--spacing-xl);
+}
+
+.word-display {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: var(--spacing-lg);
+  background: var(--background);
+  border-radius: var(--radius-lg);
+  min-height: 80px;
+  align-items: center;
+}
+
+.word-letter {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 3px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--background-elevated);
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+}
+
+.word-letter.missing {
+  background: var(--background);
+  border-color: var(--primary);
+  border-style: dashed;
+  color: var(--text-light);
+}
+
+.word-letter.filled {
+  background: linear-gradient(135deg, #4ECDC4 0%, #6BCF7F 100%);
+  border-color: #4ECDC4;
+  color: white;
+  border-style: solid;
+}
+
+.word-letter.correct {
+  background: linear-gradient(135deg, #6BCF7F 0%, #4CAF50 100%);
+  border-color: #4CAF50;
+  color: white;
+  animation: pulse 0.5s ease-in-out;
+}
+
+.word-letter.incorrect {
+  background: linear-gradient(135deg, #FF6B6B 0%, #EF5350 100%);
+  border-color: #EF5350;
+  color: white;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.remove-letter-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #EF5350;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all var(--transition-base);
+}
+
+.remove-letter-btn:hover {
+  background: #DC2626;
+  transform: scale(1.1);
+}
+
+/* Lettres disponibles */
+.available-letters {
+  margin-bottom: var(--spacing-lg);
+}
+
+.letters-label {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+  text-align: center;
+}
+
+.letters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: var(--spacing-sm);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.letter-btn {
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--background-elevated);
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-family: 'Courier New', monospace;
+}
+
+.letter-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.letter-btn:disabled,
+.letter-btn.used {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--background);
+}
+
+/* Bouton de validation */
+.validate-btn {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  transition: all var(--transition-base);
+  margin-bottom: var(--spacing-lg);
+}
+
+.validate-btn.ready {
+  background: linear-gradient(135deg, #4ECDC4 0%, #6BCF7F 100%);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.validate-btn.ready:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.validate-btn.disabled {
+  background: var(--background);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  border: 2px solid var(--border);
+}
+
+/* Résultat */
+.result-display {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  margin-top: var(--spacing-lg);
+}
+
+.result-display.correct {
+  background: linear-gradient(135deg, rgba(107, 207, 127, 0.1) 0%, rgba(76, 175, 80, 0.1) 100%);
+  border-left: 4px solid #4CAF50;
+}
+
+.result-display.incorrect {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(239, 83, 80, 0.1) 100%);
+  border-left: 4px solid #EF5350;
+}
+
+.result-display h4 {
+  margin: var(--spacing-md) 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.result-display.correct h4 {
+  color: #4CAF50;
+}
+
+.result-display.incorrect h4 {
+  color: #EF5350;
+}
+
+.result-display p {
+  margin: var(--spacing-sm) 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.result-display strong {
+  font-size: 1.5rem;
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+}
+
+.justification-text {
+  margin-top: var(--spacing-md);
+  font-style: italic;
+}
+
+.reset-btn {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.reset-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+

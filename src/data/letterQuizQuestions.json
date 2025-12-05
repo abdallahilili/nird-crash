@@ -1,0 +1,105 @@
+{
+  "questions": [
+    {
+      "type": "letter",
+      "levelId": 1,
+      "question": "C'est un système d'exploitation open source très populaire",
+      "wordPattern": "L__UX",
+      "correctWord": "LINUX",
+      "availableLetters": "LINUXABCDEFGHIJKMNOPQRSTVWYZ",
+      "justification": "Linux est un système d'exploitation open source gratuit et modifiable, parfait pour remplacer Windows.",
+      "source": "Section 4 - Concrètement, que fait NIRD ?"
+    },
+    {
+      "type": "letter",
+      "levelId": 1,
+      "question": "Suite bureautique open source alternative à Microsoft Office",
+      "wordPattern": "L__REO__ICE",
+      "correctWord": "LIBREOFFICE",
+      "availableLetters": "LIBREOFFICABCDGHJKMNOPQRSTUVWXYZ",
+      "justification": "LibreOffice est une suite bureautique complète, gratuite et open source.",
+      "source": "Section 4 - Concrètement, que fait NIRD ?"
+    },
+    {
+      "type": "letter",
+      "levelId": 2,
+      "question": "Navigateur web open source respectueux de la vie privée",
+      "wordPattern": "F__EFOX",
+      "correctWord": "FIREFOX",
+      "availableLetters": "FIREFOXABCDGHJKLMNOPQRSTUVWYZ",
+      "justification": "Firefox est un navigateur open source qui respecte votre vie privée, contrairement à Chrome.",
+      "source": "Section 8 - Pourquoi les logiciels libres ?"
+    },
+    {
+      "type": "letter",
+      "levelId": 2,
+      "question": "Principe fondamental du NIRD : rendre accessible à tous",
+      "wordPattern": "I__LUSION",
+      "correctWord": "INCLUSION",
+      "availableLetters": "INCLUSIONABCDEFGHJKMPQRTVWXYZ",
+      "justification": "L'inclusion est l'un des 3 piliers de NIRD : des outils accessibles à tous.",
+      "source": "Section 3 - Les 3 piliers de NIRD"
+    },
+    {
+      "type": "letter",
+      "levelId": 3,
+      "question": "Principe NIRD : allonger la vie du matériel, réduire les déchets",
+      "wordPattern": "D__RABILITE",
+      "correctWord": "DURABILITE",
+      "availableLetters": "DURABILITEABCDEFGHJKMNOPQRSTVWXYZ",
+      "justification": "La durabilité est l'un des 3 piliers de NIRD : allonger la vie du matériel, réduire les déchets.",
+      "source": "Section 3 - Les 3 piliers de NIRD"
+    },
+    {
+      "type": "letter",
+      "levelId": 3,
+      "question": "Principe NIRD : solutions transparentes et respectueuses",
+      "wordPattern": "R__PONSABILITE",
+      "correctWord": "RESPONSABILITE",
+      "availableLetters": "RESPONSABILITEABCDEFGHJKMNOPQRUVWXYZ",
+      "justification": "La responsabilité est l'un des 3 piliers de NIRD : solutions transparentes et respectueuses.",
+      "source": "Section 3 - Les 3 piliers de NIRD"
+    },
+    {
+      "type": "letter",
+      "levelId": 4,
+      "question": "Action de NIRD : donner une nouvelle vie à du matériel ancien",
+      "wordPattern": "R__ONDITIONNEMENT",
+      "correctWord": "RECONDITIONNEMENT",
+      "availableLetters": "RECONDITIONNEMENTABCDEFGHJKLPQRSUVWXYZ",
+      "justification": "Le reconditionnement permet de donner une nouvelle vie au matériel, réduisant les déchets.",
+      "source": "Section 4 - Concrètement, que fait NIRD ?"
+    },
+    {
+      "type": "letter",
+      "levelId": 5,
+      "question": "Groupe de personnes qui travaillent ensemble pour un objectif commun",
+      "wordPattern": "C__MUNAUTE",
+      "correctWord": "COMMUNAUTE",
+      "availableLetters": "COMMUNAUTEABCDEFGHIJKLPQRSTVWXYZ",
+      "justification": "La communauté NIRD rassemble enseignants, élèves, techniciens et collectivités.",
+      "source": "Section 2 - Qu'est-ce que NIRD ?"
+    },
+    {
+      "type": "letter",
+      "levelId": 6,
+      "question": "Organisation qui peut rejoindre NIRD pour contribuer",
+      "wordPattern": "C__LECTIVITE",
+      "correctWord": "COLLECTIVITE",
+      "availableLetters": "COLLECTIVITEABCDEFGHJKMNOPQRSUVWXYZ",
+      "justification": "Les collectivités (mairies, départements, régions) peuvent contribuer à NIRD.",
+      "source": "Section 5 - Qui peut agir ?"
+    },
+    {
+      "type": "letter",
+      "levelId": 7,
+      "question": "Établissement scolaire qui utilise Linux et matériel reconditionné",
+      "wordPattern": "L__CEE",
+      "correctWord": "LYCEE",
+      "availableLetters": "LYCEEABCDEFGHIJKMNOPQRSTUVWXYZ",
+      "justification": "Le lycée Carnot est un exemple inspirant qui utilise Linux et du matériel reconditionné.",
+      "source": "Section 7 - Exemple inspirant"
+    }
+  ]
+}
+

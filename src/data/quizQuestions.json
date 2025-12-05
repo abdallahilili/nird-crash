@@ -1,0 +1,94 @@
+{
+  "questions": [
+    {
+      "type": "completion",
+      "levelId": 1,
+      "question": "Windows 10 ne sera plus mis à jour, ce qui risque de jeter des milliers d'ordinateurs fonctionnels. La solution est le numérique...",
+      "option1": "Responsable",
+      "option2": "Obsolète",
+      "correctOption": "option1",
+      "justification": "Le numérique responsable permet d'économiser, réutiliser et protéger la planète en évitant de jeter du matériel fonctionnel.",
+      "source": "Section 1 - Pourquoi agir ?"
+    },
+    {
+      "type": "completion",
+      "levelId": 1,
+      "question": "Le NIRD rassemble enseignants, élèves, techniciens et collectivités pour un numérique scolaire...",
+      "option1": "Inclusif, Responsable et Durable",
+      "option2": "Exclusif et Propriétaire",
+      "correctOption": "option1",
+      "justification": "Le NIRD rassemble tous ces acteurs pour un numérique scolaire Inclusif (outils accessibles), Responsable (solutions transparentes) et Durable (allonger la vie du matériel).",
+      "source": "Section 2 - Qu'est-ce que NIRD ?"
+    },
+    {
+      "type": "completion",
+      "levelId": 2,
+      "question": "Les logiciels libres permettent d'éviter les licences chères, l'obsolescence programmée et la...",
+      "option1": "Dépendance aux Big Tech",
+      "option2": "Innovation technologique",
+      "correctOption": "option1",
+      "justification": "Les logiciels libres permettent d'éviter les licences chères, l'obsolescence programmée et la dépendance aux Big Tech.",
+      "source": "Section 8 - Pourquoi les logiciels libres ?"
+    },
+    {
+      "type": "completion",
+      "levelId": 2,
+      "question": "LibreOffice est une... open source à Google Workspace.",
+      "option1": "Alternative",
+      "option2": "Dépendance",
+      "correctOption": "option1",
+      "justification": "LibreOffice est une excellente alternative libre et gratuite à Google Workspace.",
+      "source": "Section 4 - Concrètement, que fait NIRD ?"
+    },
+    {
+      "type": "completion",
+      "levelId": 3,
+      "question": "Les 3 piliers de NIRD sont : Inclusion (outils accessibles), Responsabilité (solutions transparentes) et...",
+      "option1": "Durabilité (allonger la vie du matériel)",
+      "option2": "Obsolescence (renouveler régulièrement)",
+      "correctOption": "option1",
+      "justification": "Les trois piliers de NIRD sont : Inclusion, Responsabilité et Durabilité (allonger la vie du matériel, réduire les déchets).",
+      "source": "Section 3 - Les 3 piliers de NIRD"
+    },
+    {
+      "type": "completion",
+      "levelId": 4,
+      "question": "NIRD sensibilise, installe Linux, partage des ressources libres, reconditionne le matériel et...",
+      "option1": "Accompagne les écoles",
+      "option2": "Vend des licences",
+      "correctOption": "option1",
+      "justification": "NIRD sensibilise, installe Linux, partage des ressources libres, reconditionne le matériel et accompagne les écoles.",
+      "source": "Section 4 - Concrètement, que fait NIRD ?"
+    },
+    {
+      "type": "completion",
+      "levelId": 5,
+      "question": "Qui peut contribuer à NIRD ?",
+      "option1": "Tout le monde (élèves, enseignants, techniciens, collectivités)",
+      "option2": "Seulement les enseignants",
+      "correctOption": "option1",
+      "justification": "Tout le monde peut contribuer : élèves, enseignants, techniciens et collectivités. NIRD est ouvert à tous !",
+      "source": "Section 5 - Qui peut agir ?"
+    },
+    {
+      "type": "completion",
+      "levelId": 6,
+      "question": "Pour rejoindre NIRD, vous pouvez...",
+      "option1": "Visiter le site, participer à des ateliers, tester Linux, ou partager vos solutions",
+      "option2": "Uniquement participer à des ateliers obligatoires",
+      "correctOption": "option1",
+      "justification": "Vous pouvez rejoindre NIRD de plusieurs façons : visiter le site, participer à des ateliers, tester Linux, ou partager vos solutions.",
+      "source": "Section 6 - Comment rejoindre NIRD ?"
+    },
+    {
+      "type": "completion",
+      "levelId": 7,
+      "question": "Au lycée Carnot, l'utilisation de Linux et de matériel reconditionné a permis...",
+      "option1": "Des économies, moins de déchets et plus d'autonomie",
+      "option2": "Des coûts élevés et plus de déchets",
+      "correctOption": "option1",
+      "justification": "C'est un exemple inspirant qui montre que Linux et le matériel reconditionné permettent des économies, moins de déchets et plus d'autonomie.",
+      "source": "Section 7 - Exemple inspirant"
+    }
+  ]
+}
