@@ -106,56 +106,103 @@
   background: var(--dark);
 }
 
-.youtube-video {
+.local-video-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border: none;
-}
-
-.video-placeholder {
-  aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  background: var(--dark);
   border-radius: var(--radius-xl);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-xl);
-  position: relative;
   overflow: hidden;
 }
 
-.video-placeholder::before {
-  content: '';
+.local-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.local-video::-webkit-media-controls-panel {
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+}
+
+.local-video::-webkit-media-controls-play-button {
+  background-color: var(--primary);
+  border-radius: 50%;
+}
+
+.local-video::-webkit-media-controls-current-time-display,
+.local-video::-webkit-media-controls-time-remaining-display {
+  color: white;
+  font-weight: 500;
+}
+
+.custom-play-button {
   position: absolute;
-  inset: 0;
-  background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none"/><path d="M30 20 L30 80 L70 50 Z" fill="white" opacity="0.3"/></svg>') center/200px no-repeat;
-  opacity: 0.1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: var(--shadow-xl);
+  transition: all var(--transition-base);
 }
 
-.placeholder-content {
+.custom-play-button:hover {
+  background: var(--primary-dark);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--spacing-md);
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.7);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+}
+
+.control-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.control-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+.video-description {
   text-align: center;
-  color: var(--light);
-  z-index: 1;
-  position: relative;
-}
-
-.placeholder-content svg {
-  margin: 0 auto var(--spacing-lg);
-  opacity: 0.8;
-}
-
-.placeholder-text {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: var(--spacing-sm);
-}
-
-.placeholder-hint {
-  font-size: 1rem;
-  opacity: 0.8;
+  color: var(--text-secondary);
+  margin-top: var(--spacing-lg);
+  font-size: 1.125rem;
+  line-height: 1.6;
 }
 
 /* About Section */
@@ -333,6 +380,19 @@
   box-shadow: var(--shadow-2xl);
 }
 
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(20px) rotate(240deg);
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .welcome-hero {
@@ -363,6 +423,30 @@
   .feature-card {
     padding: var(--spacing-lg);
   }
+
+  .custom-play-button {
+    width: 60px;
+    height: 60px;
+  }
+
+  .custom-play-button svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .video-controls {
+    padding: var(--spacing-xs) var(--spacing-md);
+  }
+
+  .control-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .control-btn svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -384,5 +468,9 @@
     font-size: 1rem;
     padding: var(--spacing-sm);
   }
-}
 
+  .video-description {
+    font-size: 1rem;
+    padding: 0 var(--spacing-sm);
+  }
+}
