@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import useGameStore from '../../store/gameStore';
@@ -64,8 +64,8 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     }
   }, [lastWordTime]);
   
-  // Helper to show floating points
-  const showFloatingPointsEffect = (points, comboMultiplier, position) => {
+  // Helper to show floating points - optimisé avec useCallback
+  const showFloatingPointsEffect = useCallback((points, comboMultiplier, position) => {
     const id = floatingPointsIdRef.current++;
     const newFloatingPoint = {
       id,
@@ -77,19 +77,20 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     
     setFloatingPoints(prev => [...prev, newFloatingPoint]);
     
-    // Remove after animation
+    // Retire après l'animation
     setTimeout(() => {
       setFloatingPoints(prev => prev.filter(fp => fp.id !== id));
     }, 2500);
-  };
+  }, []);
   
-  const handleWordFormed = (word, position) => {
+  const handleWordFormed = useCallback((word, position) => {
     const normalizedWord = word.toUpperCase().trim();
     
-    // Check if word already found
+    // Vérifie si le mot est déjà trouvé
     if (foundWords.includes(normalizedWord)) {
       toast('Vous avez déjà trouvé ce mot ! 🔄', {
         icon: '⚠️',
+        duration: 1500,
         style: {
           background: '#FFD93D',
           color: '#2C3E50',
@@ -98,79 +99,78 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
       return { success: false };
     }
     
-    // Find the word in level words
+    // Trouve le mot dans la liste des mots du niveau
     const wordData = levelData.words.find(w => w.word === normalizedWord);
     
-    if (wordData) {
-      // Calculate combo
-      const now = Date.now();
-      let currentCombo = 1;
-      
-      if (lastWordTimeRef.current && now - lastWordTimeRef.current < 5000) {
-        currentCombo = combo + 1;
-        setCombo(currentCombo);
-      } else {
-        setCombo(1);
-      }
-      
-      setLastWordTime(now);
-      lastWordTimeRef.current = now;
-      
-      // Calculate position for effects (center of screen if not provided)
-      const effectPosition = position || {
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
-      };
-      
-      // Show particles
-      setParticlePosition(effectPosition);
-      setShowParticles(true);
-      setTimeout(() => setShowParticles(false), 100);
-      
-      // Show floating points with combo multiplier
-      showFloatingPointsEffect(wordData.points, currentCombo, effectPosition);
-      
-      // Valid word found!
-      addFoundWord(normalizedWord, wordData.points * currentCombo);
-      setCurrentWordData(wordData);
-      setShowPopup(true);
-      
-      // Show motivational message with combo info
-      const randomMessage = messagesData.messages[
-        Math.floor(Math.random() * messagesData.messages.length)
-      ];
-      
-      const comboMessage = currentCombo > 1 ? ` 🔥 COMBO x${currentCombo}!` : '';
-      
-      toast.success(randomMessage + comboMessage, {
-        duration: 2000,
-        style: {
-          background: currentCombo > 1 
-            ? 'linear-gradient(135deg, #FF6B6B 0%, #FFD93D 100%)'
-            : 'linear-gradient(135deg, #6BCF7F 0%, #A8E6CF 100%)',
-          color: '#fff',
-          fontWeight: 'bold',
-        }
-      });
-      
-      // Check if level is complete
-      if (foundWords.length + 1 >= levelData.requiredWords) {
-        setTimeout(() => {
-          handleLevelComplete();
-        }, 2000);
-      }
-      
-      return { success: true, combo: currentCombo };
-    } else {
-      // Invalid word - shake animation will be handled by LetterGrid
+    if (!wordData) {
       toast.error('Ce mot n\'est pas dans la liste ! 😕', {
         duration: 1500,
       });
       return { success: false };
     }
-  };
+    
+    // Calcule le combo
+    const now = Date.now();
+    let currentCombo = 1;
+    
+    if (lastWordTimeRef.current && now - lastWordTimeRef.current < 5000) {
+      currentCombo = combo + 1;
+      setCombo(currentCombo);
+    } else {
+      setCombo(1);
+    }
+    
+    setLastWordTime(now);
+    lastWordTimeRef.current = now;
+    
+    // Position pour les effets
+    const effectPosition = position || {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+    };
+    
+    // Affiche les particules
+    setParticlePosition(effectPosition);
+    setShowParticles(true);
+    setTimeout(() => setShowParticles(false), 100);
+    
+    // Affiche les points flottants avec multiplicateur de combo
+    showFloatingPointsEffect(wordData.points * currentCombo, currentCombo, effectPosition);
+    
+    // Mot valide trouvé !
+    addFoundWord(normalizedWord, wordData.points * currentCombo);
+    setCurrentWordData(wordData);
+    setShowPopup(true);
+    
+    // Message motivationnel avec info combo
+    const randomMessage = messagesData.messages[
+      Math.floor(Math.random() * messagesData.messages.length)
+    ];
+    
+    const comboMessage = currentCombo > 1 ? ` 🔥 COMBO x${currentCombo}!` : '';
+    
+    toast.success(randomMessage + comboMessage, {
+      duration: 2000,
+      style: {
+        background: currentCombo > 1 
+          ? 'linear-gradient(135deg, #FF6B6B 0%, #FFD93D 100%)'
+          : 'linear-gradient(135deg, #6BCF7F 0%, #A8E6CF 100%)',
+        color: '#fff',
+        fontWeight: 'bold',
+      }
+    });
+    
+    // Vérifie si le niveau est complété
+    if (foundWords.length + 1 >= levelData.requiredWords) {
+      setTimeout(() => {
+        handleLevelComplete();
+      }, 2000);
+    }
+    
+    return { success: true, combo: currentCombo };
+  }, [foundWords, levelData.words, levelData.requiredWords, combo, addFoundWord, showFloatingPointsEffect, handleLevelComplete]);
   
-  const handleLevelComplete = () => {
+  const handleLevelComplete = useCallback(() => {
     const finalStars = calculateStars(foundWords.length, levelData.words.length);
     
     toast.success(`🎉 Niveau complété avec ${finalStars} étoile${finalStars > 1 ? 's' : ''} !`, {
@@ -191,9 +191,9 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
         riddleSolved: riddleSolved
       });
     }, 3000);
-  };
+  }, [foundWords.length, levelData.words.length, currentScore, foundWords, riddleSolved, calculateStars, onLevelComplete]);
   
-  const handleRiddleSubmit = () => {
+  const handleRiddleSubmit = useCallback(() => {
     const normalizedAnswer = riddleAnswer.toUpperCase().trim();
     const correctAnswer = levelData.riddleAnswer.toUpperCase().trim();
     
@@ -201,6 +201,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
       setRiddleSolved(true);
       solveRiddle(levelData.id);
       setShowRiddleModal(false);
+      setRiddleAnswer('');
       toast.success('🎯 Bravo ! Énigme résolue ! +50 points bonus !', {
         duration: 3000,
         style: {
@@ -215,7 +216,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
         duration: 2000,
       });
     }
-  };
+  }, [riddleAnswer, levelData.riddleAnswer, levelData.id, solveRiddle, addFoundWord]);
   
   return (
     <div 

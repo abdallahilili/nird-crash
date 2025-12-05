@@ -1,12 +1,14 @@
 .game-container {
   min-height: 100vh;
   padding: var(--spacing-xl) 0;
+  background: linear-gradient(180deg, var(--background) 0%, var(--background-elevated) 100%);
 }
 
 .game-content {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
+  animation: slideInUp 0.5s ease-out;
 }
 
 .game-header-section {
@@ -15,10 +17,20 @@
   align-items: flex-start;
   gap: var(--spacing-md);
   flex-wrap: wrap;
+  background: var(--background-elevated);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
 }
 
 .back-btn {
   flex-shrink: 0;
+  transition: all var(--transition-base);
+}
+
+.back-btn:hover {
+  transform: translateX(-4px);
 }
 
 .level-info {
@@ -31,32 +43,55 @@
   font-family: var(--font-heading);
   color: var(--dark);
   margin-bottom: var(--spacing-sm);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .level-description {
-  color: var(--text);
+  color: var(--text-secondary);
   font-size: 1.1rem;
   margin-bottom: var(--spacing-md);
+  line-height: 1.7;
 }
 
 .level-story {
-  background: var(--light);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
+  backdrop-filter: blur(10px);
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
   font-style: italic;
   color: var(--text-light);
-  line-height: 1.6;
+  line-height: 1.7;
+  transition: all var(--transition-base);
+}
+
+.level-story:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .riddle-btn {
   flex-shrink: 0;
   min-width: 150px;
+  position: relative;
+  overflow: hidden;
 }
 
 .riddle-btn.solved {
-  background: var(--success);
-  opacity: 0.7;
+  background: var(--gradient-success);
+  opacity: 0.9;
+  cursor: default;
+}
+
+.riddle-btn.solved::before {
+  content: '✓';
+  position: absolute;
+  right: var(--spacing-sm);
+  font-size: 1.2rem;
 }
 
 .game-main {
@@ -68,37 +103,64 @@
 
 .game-left {
   position: sticky;
-  top: calc(var(--spacing-xl) + 80px);
+  top: calc(var(--spacing-xl) + 100px);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
 .game-center {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
 }
 
-/* Riddle Modal */
+/* Riddle Modal - Moderne */
 .riddle-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: var(--z-modal);
   padding: var(--spacing-md);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .riddle-modal {
-  background: var(--light);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-xl);
-  max-width: 500px;
+  background: var(--background-elevated);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-2xl);
+  max-width: 550px;
   width: 100%;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.riddle-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-purple);
 }
 
 .riddle-modal h3 {
@@ -106,34 +168,44 @@
   margin-bottom: var(--spacing-lg);
   color: var(--dark);
   font-family: var(--font-heading);
+  font-size: 1.75rem;
 }
 
 .riddle-text {
   background: var(--gradient-purple);
   color: var(--light);
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-lg);
-  font-size: 1.2rem;
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  font-size: 1.25rem;
   text-align: center;
-  line-height: 1.6;
-  margin-bottom: var(--spacing-lg);
+  line-height: 1.8;
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
+  font-weight: 500;
 }
 
 .riddle-input {
   width: 100%;
-  padding: var(--spacing-md);
-  font-size: 1.1rem;
-  border: 3px solid var(--border);
+  padding: var(--spacing-lg);
+  font-size: 1.125rem;
+  border: 2px solid var(--border);
   border-radius: var(--radius-lg);
   font-family: var(--font-primary);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
   transition: all var(--transition-base);
+  background: var(--background-elevated);
+  color: var(--text);
 }
 
 .riddle-input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15);
+  transform: translateY(-2px);
+}
+
+.riddle-input::placeholder {
+  color: var(--text-disabled);
 }
 
 .riddle-actions {
@@ -143,9 +215,10 @@
 
 .riddle-actions .btn {
   flex: 1;
+  padding: var(--spacing-md) var(--spacing-xl);
 }
 
-/* Responsive */
+/* Responsive - Amélioré */
 @media (max-width: 1024px) {
   .game-main {
     grid-template-columns: 1fr;
@@ -155,6 +228,7 @@
   .game-left {
     position: static;
     order: 2;
+    max-height: none;
   }
   
   .game-center {
@@ -167,9 +241,14 @@
     padding: var(--spacing-lg) 0;
   }
   
+  .game-content {
+    gap: var(--spacing-lg);
+  }
+  
   .game-header-section {
     flex-direction: column;
     align-items: stretch;
+    padding: var(--spacing-md);
   }
   
   .back-btn,
@@ -182,10 +261,43 @@
   }
   
   .level-title {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
   
   .level-description {
     font-size: 1rem;
+  }
+  
+  .level-story {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.9375rem;
+  }
+  
+  .riddle-modal {
+    padding: var(--spacing-xl);
+    margin: var(--spacing-md);
+  }
+  
+  .riddle-text {
+    padding: var(--spacing-lg);
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-header-section {
+    padding: var(--spacing-sm);
+  }
+  
+  .level-title {
+    font-size: 1.25rem;
+  }
+  
+  .riddle-modal {
+    padding: var(--spacing-lg);
+  }
+  
+  .riddle-modal h3 {
+    font-size: 1.5rem;
   }
 }

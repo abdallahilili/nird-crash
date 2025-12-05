@@ -1,157 +1,86 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Check, RotateCcw, Zap } from 'lucide-react';
 import useGameStore from '../../store/gameStore';
 import './LetterGrid.css';
-import './LetterGrid-animations.css';
 
 const LetterGrid = ({ gridLetters, onWordFormed }) => {
   const [selectedCells, setSelectedCells] = useState([]);
   const [currentWord, setCurrentWord] = useState('');
   const [isSelecting, setIsSelecting] = useState(false);
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  const [showCursorTrail, setShowCursorTrail] = useState(false);
-  const [validationAnimation, setValidationAnimation] = useState(null); // 'success' or 'error'
+  const [validationAnimation, setValidationAnimation] = useState(null);
   const gridRef = useRef(null);
   const cursorTrailRef = useRef([]);
+  const lastWordTimeRef = useRef(null);
   
   const { foundWords } = useGameStore();
-  
-  // Vérifie si deux cellules sont adjacentes (incluant diagonales)
-  const areCellsAdjacent = (cell1, cell2) => {
-    const rowDiff = Math.abs(cell1.row - cell2.row);
-    const colDiff = Math.abs(cell1.col - cell2.col);
-    return rowDiff <= 1 && colDiff <= 1 && !(rowDiff === 0 && colDiff === 0);
-  };
 
-  // Vérifie si une cellule est déjà sélectionnée
-  const isCellAlreadySelected = useCallback((row, col) => {
+  // Mémoïsation pour optimiser les vérifications
+  const isCellSelected = useCallback((row, col) => {
     return selectedCells.some(cell => cell.row === row && cell.col === col);
   }, [selectedCells]);
 
-  // Trouve l'index de la dernière cellule sélectionnée
-  const getLastSelectedCell = () => {
-    return selectedCells.length > 0 ? selectedCells[selectedCells.length - 1] : null;
-  };
+  const getSelectionIndex = useCallback((row, col) => {
+    return selectedCells.findIndex(cell => cell.row === row && cell.col === col);
+  }, [selectedCells]);
 
-  // Vérifie si le chemin vers une nouvelle cellule est valide
-  const isValidPath = (newRow, newCol) => {
+  // Vérifie si deux cellules sont adjacentes (8 directions)
+  const areCellsAdjacent = useCallback((cell1, cell2) => {
+    const rowDiff = Math.abs(cell1.row - cell2.row);
+    const colDiff = Math.abs(cell1.col - cell2.col);
+    return rowDiff <= 1 && colDiff <= 1 && !(rowDiff === 0 && colDiff === 0);
+  }, []);
+
+  // Vérifie si le chemin est valide
+  const isValidPath = useCallback((newRow, newCol) => {
     if (selectedCells.length === 0) return true;
     
-    const lastCell = getLastSelectedCell();
+    const lastCell = selectedCells[selectedCells.length - 1];
     if (!lastCell) return false;
     
-    // Vérifie l'adjacence
-    if (!areCellsAdjacent(lastCell, { row: newRow, col: newCol })) {
-      return false;
-    }
-    
-    // Vérifie si déjà sélectionnée
-    if (isCellAlreadySelected(newRow, newCol)) {
-      return false;
-    }
-    
-    return true;
-  };
+    return areCellsAdjacent(lastCell, { row: newRow, col: newCol }) && 
+           !isCellSelected(newRow, newCol);
+  }, [selectedCells, areCellsAdjacent, isCellSelected]);
 
-  // Met à jour la position du curseur pour l'animation de drag
-  const updateCursorPosition = (event) => {
-    if (!gridRef.current || !isSelecting) return;
-    
-    const rect = gridRef.current.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    
-    setCursorPosition({ x, y });
-    
-    // Ajoute la position au trail
-    cursorTrailRef.current.push({ x, y, timestamp: Date.now() });
-    
-    // Garde seulement les dernières positions (pour l'effet de trainée)
-    if (cursorTrailRef.current.length > 10) {
-      cursorTrailRef.current.shift();
+  // Calcule la position pour les effets
+  const calculateWordPosition = useCallback(() => {
+    if (!gridRef.current || selectedCells.length === 0) {
+      return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     }
-  };
+    
+    const gridRect = gridRef.current.getBoundingClientRect();
+    const cellSize = gridRect.width / gridLetters[0].length;
+    
+    const avgRow = selectedCells.reduce((sum, cell) => sum + cell.row, 0) / selectedCells.length;
+    const avgCol = selectedCells.reduce((sum, cell) => sum + cell.col, 0) / selectedCells.length;
+    
+    return {
+      x: gridRect.left + (avgCol + 0.5) * cellSize,
+      y: gridRect.top + (avgRow + 0.5) * cellSize
+    };
+  }, [selectedCells, gridLetters]);
 
-  // Handle mouse down on a cell
-  const handleCellMouseDown = (letter, row, col, event) => {
+  // Gestion du début de sélection
+  const handleCellMouseDown = useCallback((letter, row, col, event) => {
+    event.preventDefault();
     setIsSelecting(true);
-    setShowCursorTrail(true);
     setSelectedCells([{ letter, row, col }]);
     setCurrentWord(letter);
-    
-    // Initialise la position du curseur
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
-    
-    if (gridRef.current) {
-      const gridRect = gridRef.current.getBoundingClientRect();
-      setCursorPosition({
-        x: x - gridRect.left,
-        y: y - gridRect.top
-      });
-    }
-  };
+    lastWordTimeRef.current = Date.now();
+  }, []);
 
-  // Handle mouse enter on a cell while dragging
-  const handleCellMouseEnter = useCallback((letter, row, col, event) => {
+  // Gestion du survol pendant la sélection
+  const handleCellMouseEnter = useCallback((letter, row, col) => {
     if (!isSelecting) return;
     
     if (isValidPath(row, col)) {
-      const newSelectedCells = [...selectedCells, { letter, row, col }];
-      const newWord = newSelectedCells.map(cell => cell.letter).join('');
-      
-      setSelectedCells(newSelectedCells);
-      setCurrentWord(newWord);
-      
-      // Met à jour la position du curseur au centre de la cellule
-      if (event && event.currentTarget) {
-        const rect = event.currentTarget.getBoundingClientRect();
-        if (gridRef.current) {
-          const gridRect = gridRef.current.getBoundingClientRect();
-          setCursorPosition({
-            x: rect.left + rect.width / 2 - gridRect.left,
-            y: rect.top + rect.height / 2 - gridRect.top
-          });
-        }
-      }
+      setSelectedCells(prev => [...prev, { letter, row, col }]);
+      setCurrentWord(prev => prev + letter);
     }
-  }, [isSelecting, selectedCells, isValidPath, isCellAlreadySelected]);
+  }, [isSelecting, isValidPath]);
 
-  // Handle mouse move for cursor trail
-  const handleMouseMove = (event) => {
-    if (!isSelecting) return;
-    updateCursorPosition(event);
-  };
-
-  // Handle mouse up - complete word selection
-  const handleMouseUp = useCallback(() => {
-    if (isSelecting && currentWord.length >= 3) {
-      // Calculate center position of the word
-      const gridRect = gridRef.current?.getBoundingClientRect();
-      if (gridRect && selectedCells.length > 0) {
-        const avgRow = selectedCells.reduce((sum, cell) => sum + cell.row, 0) / selectedCells.length;
-        const avgCol = selectedCells.reduce((sum, cell) => sum + cell.col, 0) / selectedCells.length;
-        
-        const cellSize = gridRect.width / 5; // assuming 5x5 grid
-        const centerX = gridRect.left + (avgCol + 0.5) * cellSize;
-        const centerY = gridRect.top + (avgRow + 0.5) * cellSize;
-        
-        const position = { x: centerX, y: centerY };
-        const result = onWordFormed(currentWord, position);
-        
-        // Animate validation feedback
-        if (result) {
-          setValidationAnimation(result.success ? 'success' : 'error');
-          setTimeout(() => setValidationAnimation(null), 600);
-        }
-      }
-    }
-    resetSelection();
-  }, [isSelecting, currentWord, onWordFormed, selectedCells]);
-
-  // Handle click on individual cell (for touch/click interface)
-  const handleCellClick = (letter, row, col) => {
+  // Gestion du clic sur une cellule
+  const handleCellClick = useCallback((letter, row, col) => {
     if (selectedCells.length === 0) {
       setSelectedCells([{ letter, row, col }]);
       setCurrentWord(letter);
@@ -159,288 +88,253 @@ const LetterGrid = ({ gridLetters, onWordFormed }) => {
     }
 
     if (isValidPath(row, col)) {
-      const newSelectedCells = [...selectedCells, { letter, row, col }];
-      const newWord = newSelectedCells.map(cell => cell.letter).join('');
-      setSelectedCells(newSelectedCells);
-      setCurrentWord(newWord);
+      setSelectedCells(prev => [...prev, { letter, row, col }]);
+      setCurrentWord(prev => prev + letter);
     } else if (selectedCells.length === 1 && 
                selectedCells[0].row === row && 
                selectedCells[0].col === col) {
-      // Si on clique sur la même cellule, on efface la sélection
       resetSelection();
     }
-  };
+  }, [selectedCells, isValidPath]);
 
-  // Reset selection
-  const resetSelection = () => {
+  // Réinitialise la sélection
+  const resetSelection = useCallback(() => {
     setIsSelecting(false);
-    setShowCursorTrail(false);
     setSelectedCells([]);
     setCurrentWord('');
     cursorTrailRef.current = [];
-  };
+  }, []);
 
-  // Rendu de l'effet de trainée du curseur
-  const renderCursorTrail = () => {
-    if (!showCursorTrail || cursorTrailRef.current.length < 2) return null;
-
-    const trailElements = [];
-    const now = Date.now();
+  // Soumet le mot
+  const handleSubmitWord = useCallback(() => {
+    if (currentWord.length < 3) return;
     
-    // Filtre les positions récentes (moins de 200ms)
-    const recentPositions = cursorTrailRef.current.filter(
-      pos => now - pos.timestamp < 200
-    );
-
-    for (let i = 0; i < recentPositions.length - 1; i++) {
-      const currentPos = recentPositions[i];
-      const nextPos = recentPositions[i + 1];
-      
-      // Calcule la distance et l'angle entre les points
-      const dx = nextPos.x - currentPos.x;
-      const dy = nextPos.y - currentPos.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-      
-      // Calcule l'opacité basée sur l'âge (les plus récents sont plus visibles)
-      const age = now - currentPos.timestamp;
-      const opacity = Math.max(0, 1 - age / 200);
-      
-      trailElements.push(
-        <motion.div
-          key={`trail-${i}`}
-          className="cursor-trail-segment"
-          style={{
-            position: 'absolute',
-            left: currentPos.x,
-            top: currentPos.y,
-            width: distance,
-            height: 4,
-            backgroundColor: `rgba(255, 217, 61, ${opacity * 0.5})`,
-            transformOrigin: '0 50%',
-            transform: `rotate(${angle}deg)`,
-            zIndex: 3,
-            borderRadius: '2px',
-          }}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: opacity, scale: 1 }}
-          transition={{ duration: 0.1 }}
-        />
-      );
+    const position = calculateWordPosition();
+    const result = onWordFormed(currentWord, position);
+    
+    if (result) {
+      setValidationAnimation(result.success ? 'success' : 'error');
+      setTimeout(() => setValidationAnimation(null), 600);
     }
     
-    return trailElements;
-  };
+    resetSelection();
+  }, [currentWord, onWordFormed, calculateWordPosition, resetSelection]);
 
-  // Rendu du curseur de drag
-  const renderDragCursor = () => {
-    if (!isSelecting || !cursorPosition) return null;
+  // Gestion du relâchement de la souris
+  const handleMouseUp = useCallback(() => {
+    if (isSelecting && currentWord.length >= 3) {
+      handleSubmitWord();
+    } else {
+      resetSelection();
+    }
+  }, [isSelecting, currentWord.length, handleSubmitWord, resetSelection]);
 
-    return (
-      <motion.div
-        className="drag-cursor"
-        style={{
-          position: 'absolute',
-          left: cursorPosition.x,
-          top: cursorPosition.y,
-          width: '30px',
-          height: '30px',
-          borderRadius: '50%',
-          backgroundColor: 'rgba(255, 217, 61, 0.3)',
-          border: '2px solid #FFD93D',
-          zIndex: 4,
-          pointerEvents: 'none',
-          transform: 'translate(-50%, -50%)',
-        }}
-        animate={{
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 1,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        {/* Point central du curseur */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: '8px',
-            height: '8px',
-            borderRadius: '50%',
-            backgroundColor: '#FFD93D',
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-      </motion.div>
-    );
-  };
-
-  // Global mouse up listener
+  // Écouteurs globaux
   useEffect(() => {
-    const handleGlobalMouseUp = () => {
-      handleMouseUp();
+    const handleGlobalMouseUp = () => handleMouseUp();
+    const handleGlobalMouseLeave = () => {
+      if (isSelecting) handleMouseUp();
     };
 
     document.addEventListener('mouseup', handleGlobalMouseUp);
     document.addEventListener('touchend', handleGlobalMouseUp);
     
-    return () => {
-      document.removeEventListener('mouseup', handleGlobalMouseUp);
-      document.removeEventListener('touchend', handleGlobalMouseUp);
-    };
-  }, [handleMouseUp]);
-
-  // Écouteur pour le mouvement global de la souris
-  useEffect(() => {
-    const handleGlobalMouseMove = (event) => {
-      handleMouseMove(event);
-    };
-
-    if (isSelecting) {
-      document.addEventListener('mousemove', handleGlobalMouseMove);
+    if (gridRef.current) {
+      gridRef.current.addEventListener('mouseleave', handleGlobalMouseLeave);
     }
 
     return () => {
-      document.removeEventListener('mousemove', handleGlobalMouseMove);
-    };
-  }, [isSelecting]);
-
-  // Prévenir le comportement par défaut du drag
-  useEffect(() => {
-    const preventDefault = (e) => {
-      if (isSelecting) {
-        e.preventDefault();
+      document.removeEventListener('mouseup', handleGlobalMouseUp);
+      document.removeEventListener('touchend', handleGlobalMouseUp);
+      if (gridRef.current) {
+        gridRef.current.removeEventListener('mouseleave', handleGlobalMouseLeave);
       }
     };
+  }, [handleMouseUp, isSelecting]);
 
-    document.addEventListener('dragstart', preventDefault);
+  // Empêche le scroll pendant la sélection
+  useEffect(() => {
+    if (isSelecting) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
     
     return () => {
-      document.removeEventListener('dragstart', preventDefault);
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     };
   }, [isSelecting]);
 
+  // Rendu de la grille avec mémoïsation
+  const gridCells = useMemo(() => {
+    return gridLetters.map((row, rowIndex) =>
+      row.map((letter, colIndex) => {
+        const isSelected = isCellSelected(rowIndex, colIndex);
+        const selectionIndex = getSelectionIndex(rowIndex, colIndex);
+        
+        return {
+          letter,
+          row: rowIndex,
+          col: colIndex,
+          isSelected,
+          selectionIndex
+        };
+      })
+    );
+  }, [gridLetters, isCellSelected, getSelectionIndex]);
+
   return (
-    <div className="letter-grid-container">
-      {currentWord && (
-        <motion.div 
-          className="current-word-display"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-        >
-          {currentWord.toUpperCase()}
-          <span className="word-length"> ({currentWord.length})</span>
-        </motion.div>
-      )}
-      
+    <div className="letter-grid-wrapper">
+      {/* Affichage du mot actuel */}
+      <AnimatePresence>
+        {currentWord && (
+          <motion.div 
+            className="current-word-display"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <span className="word-text">{currentWord.toUpperCase()}</span>
+            <span className="word-length">({currentWord.length})</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Conteneur de la grille */}
       <div 
         ref={gridRef}
-        className="letter-grid-wrapper"
+        className="letter-grid-container"
         onMouseLeave={() => {
-          if (isSelecting) {
-            handleMouseUp();
-          }
+          if (isSelecting) handleMouseUp();
         }}
       >
+        {/* Animation de validation */}
+        <AnimatePresence>
+          {validationAnimation && (
+            <motion.div
+              className={`validation-overlay ${validationAnimation}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="validation-icon"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                exit={{ scale: 0, rotate: 180 }}
+                transition={{ type: "spring", stiffness: 200, damping: 15 }}
+              >
+                {validationAnimation === 'success' ? (
+                  <Check className="w-12 h-12" />
+                ) : (
+                  <X className="w-12 h-12" />
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Grille de lettres */}
         <div className="letter-grid">
-          {/* Effet de trainée du curseur */}
-          <div className="cursor-trail">
-            {renderCursorTrail()}
-          </div>
-          
-          {/* Curseur de drag */}
-          {renderDragCursor()}
-          
-          {/* Grille de lettres */}
-          {gridLetters.map((row, rowIndex) => (
-            <div key={rowIndex} className="letter-row">
-              {row.map((letter, colIndex) => {
-                const isSelected = isCellAlreadySelected(rowIndex, colIndex);
-                const selectionIndex = selectedCells.findIndex(
-                  cell => cell.row === rowIndex && cell.col === colIndex
-                );
-                
-                return (
-                  <motion.div
-                    key={`${rowIndex}-${colIndex}`}
-                    className={`letter-cell ${isSelected ? 'selected' : ''}`}
-                    onMouseDown={(e) => handleCellMouseDown(letter, rowIndex, colIndex, e)}
-                    onMouseEnter={(e) => handleCellMouseEnter(letter, rowIndex, colIndex, e)}
-                    onTouchStart={(e) => handleCellMouseDown(letter, rowIndex, colIndex, e)}
-                    onTouchMove={(e) => {
-                      if (!isSelecting) return;
-                      e.preventDefault();
-                      const touch = e.touches[0];
-                      const element = document.elementFromPoint(touch.clientX, touch.clientY);
-                      if (element && element.classList.contains('letter-cell')) {
-                        const row = parseInt(element.dataset.row);
-                        const col = parseInt(element.dataset.col);
-                        const letter = element.textContent;
-                        handleCellMouseEnter(letter, row, col);
-                      }
-                    }}
-                    onClick={() => handleCellClick(letter, rowIndex, colIndex)}
-                    data-row={rowIndex}
-                    data-col={colIndex}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    animate={{
-                      scale: isSelected ? 1.1 : 1,
-                      backgroundColor: isSelected ? '#FFD93D' : '#FFFFFF',
-                      color: isSelected ? '#2C3E50' : '#333333',
-                      zIndex: isSelected ? 2 : 1,
-                    }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    {letter}
-                    {isSelected && (
-                      <motion.div 
-                        className="selection-order"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                      >
-                        {selectionIndex + 1}
-                      </motion.div>
-                    )}
-                  </motion.div>
-                );
-              })}
+          {gridCells.map((row, rowIndex) => (
+            <div key={rowIndex} className="grid-row">
+              {row.map((cell) => (
+                <motion.button
+                  key={`${cell.row}-${cell.col}`}
+                  className={`grid-cell ${cell.isSelected ? 'selected' : ''}`}
+                  onMouseDown={(e) => handleCellMouseDown(cell.letter, cell.row, cell.col, e)}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    handleCellMouseDown(cell.letter, cell.row, cell.col, e);
+                  }}
+                  onMouseEnter={() => handleCellMouseEnter(cell.letter, cell.row, cell.col)}
+                  onClick={() => handleCellClick(cell.letter, cell.row, cell.col)}
+                  whileHover={{ scale: cell.isSelected ? 1 : 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={{
+                    scale: cell.isSelected ? 1.1 : 1,
+                  }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <span className="cell-letter">{cell.letter}</span>
+                  
+                  {/* Numéro d'ordre de sélection */}
+                  {cell.isSelected && (
+                    <motion.span 
+                      className="selection-order"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      {cell.selectionIndex + 1}
+                    </motion.span>
+                  )}
+                  
+                  {/* Indicateur de début */}
+                  {cell.isSelected && cell.selectionIndex === 0 && (
+                    <motion.span
+                      className="start-indicator"
+                      animate={{ scale: [1, 1.3, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    />
+                  )}
+                </motion.button>
+              ))}
             </div>
           ))}
         </div>
+
+        {/* Instructions */}
+        <div className="grid-instructions">
+          <p>Glissez pour sélectionner les lettres adjacentes</p>
+          <p className="instructions-hint">(minimum 3 lettres)</p>
+        </div>
       </div>
-      
+
+      {/* Contrôles */}
       <div className="grid-controls">
         <motion.button 
-          className="btn btn-secondary" 
+          className="btn-control btn-clear"
           onClick={resetSelection}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          disabled={currentWord.length === 0}
+          whileHover={{ scale: currentWord.length > 0 ? 1.05 : 1 }}
+          whileTap={{ scale: currentWord.length > 0 ? 0.95 : 1 }}
         >
+          <RotateCcw className="w-5 h-5" />
           Effacer
         </motion.button>
+        
         <motion.button 
-          className="btn btn-primary" 
-          onClick={() => {
-            if (currentWord.length >= 3) {
-              onWordFormed(currentWord);
-              resetSelection();
-            }
-          }}
+          className={`btn-control btn-submit ${currentWord.length >= 3 ? 'active' : ''}`}
+          onClick={handleSubmitWord}
           disabled={currentWord.length < 3}
           whileHover={{ scale: currentWord.length >= 3 ? 1.05 : 1 }}
           whileTap={{ scale: currentWord.length >= 3 ? 0.95 : 1 }}
-          animate={{
-            backgroundColor: currentWord.length >= 3 ? '#4CAF50' : '#CCCCCC',
-          }}
         >
-          Valider ({currentWord.length})
+          <Check className="w-5 h-5" />
+          Valider
+          {currentWord.length >= 3 && (
+            <span className="word-count-badge">{currentWord.length}</span>
+          )}
         </motion.button>
       </div>
+
+      {/* Indicateur de sélection en cours */}
+      {isSelecting && (
+        <motion.div
+          className="selecting-indicator"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+        >
+          <Zap className="w-4 h-4" />
+          Sélection en cours
+        </motion.div>
+      )}
     </div>
   );
 };
