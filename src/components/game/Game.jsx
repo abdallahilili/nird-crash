@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import useGameStore from '../../store/gameStore';
@@ -94,13 +95,15 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
   useEffect(() => {
     // Reset level state when level changes
     resetLevel();
+    // Reset combo and timing state
     setCombo(0);
     setLastWordTime(null);
     lastWordTimeRef.current = null;
     
     // Charge une question aléatoire
     loadNewQuestion();
-  }, [levelData.id, resetLevel, loadNewQuestion]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [levelData.id]);
 
   // Affiche le bouton "Quiz suivant" après qu'une question soit répondue
   useEffect(() => {
@@ -161,7 +164,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     
     setLevelCompleteStats(stats);
     setShowLevelCompleteModal(true);
-  }, [foundWords.length, levelData.words.length, currentScore, foundWords, calculateStars]);
+  }, [foundWords, levelData.words.length, currentScore, calculateStars]);
   
   const handleModalNextLevel = useCallback(() => {
     setShowLevelCompleteModal(false);
@@ -328,7 +331,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     }
     
     return { success: true, combo: currentCombo };
-  }, [foundWords, levelData.words, levelData.requiredWords, combo, addFoundWord, showFloatingPointsEffect, handleLevelComplete]);
+  }, [foundWords, levelData.words, levelData.requiredWords, levelData.id, combo, addFoundWord, showFloatingPointsEffect, handleLevelComplete]);
   
 
   
