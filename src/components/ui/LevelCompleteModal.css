@@ -26,6 +26,27 @@
   overflow: hidden;
 }
 
+.level-complete-modal::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 217, 61, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .modal-header {
   margin-bottom: 30px;
 }
@@ -64,6 +85,18 @@
 .modal-star.active {
   color: #FFD93D;
   filter: drop-shadow(0 0 15px rgba(255, 217, 61, 0.5));
+  animation: starGlow 2s ease-in-out infinite;
+}
+
+@keyframes starGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(255, 217, 61, 0.5));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(255, 217, 61, 0.8));
+    transform: scale(1.1);
+  }
 }
 
 .stats-grid {
@@ -95,6 +128,10 @@
   font-size: 1.5rem;
   font-weight: 700;
   font-family: 'Outfit', monospace;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-actions {

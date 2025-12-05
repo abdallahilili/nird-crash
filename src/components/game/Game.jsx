@@ -16,6 +16,7 @@ import quizQuestionsData from '../../data/quizQuestions.json';
 import letterQuizQuestionsData from '../../data/letterQuizQuestions.json';
 import Director from '../Director';
 import Mentor from '../Mentor';
+import LevelCompleteModal from '../ui/LevelCompleteModal';
 import './Game.css';
 
 const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
@@ -26,6 +27,8 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
   const [showMentor, setShowMentor] = useState(false);
   const [mentorMessage, setMentorMessage] = useState('');
   const [mentorEmotion, setMentorEmotion] = useState('happy');
+  const [showLevelCompleteModal, setShowLevelCompleteModal] = useState(false);
+  const [levelCompleteStats, setLevelCompleteStats] = useState(null);
   
   // Système de questions vrai/faux et à compléter
   const [currentQuizQuestion, setCurrentQuizQuestion] = useState(null);
@@ -143,25 +146,45 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
   const handleLevelComplete = useCallback(() => {
     const finalStars = calculateStars(foundWords.length, levelData.words.length);
     
-    toast.success(`🎉 Niveau complété avec ${finalStars} étoile${finalStars > 1 ? 's' : ''} !`, {
-      duration: 3000,
-      style: {
-        background: 'linear-gradient(135deg, #FF6B6B 0%, #FFD93D 100%)',
-        color: '#fff',
-        fontSize: '1.1rem',
-        fontWeight: 'bold',
-      }
-    });
+    // Afficher confettis plein écran
+    setParticlePosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    setShowParticles(true);
+    setTimeout(() => setShowParticles(false), 4000);
     
-    setTimeout(() => {
-      onLevelComplete({
-        score: currentScore,
-        wordsFound: foundWords,
-        stars: finalStars,
-        riddleSolved: false
-      });
-    }, 3000);
-  }, [foundWords.length, levelData.words.length, currentScore, foundWords, calculateStars, onLevelComplete]);
+    // Préparer les stats pour le modal
+    const stats = {
+      score: currentScore,
+      stars: finalStars,
+      wordsFound: foundWords.length,
+      totalWords: levelData.words.length
+    };
+    
+    setLevelCompleteStats(stats);
+    setShowLevelCompleteModal(true);
+  }, [foundWords.length, levelData.words.length, currentScore, foundWords, calculateStars]);
+  
+  const handleModalNextLevel = useCallback(() => {
+    setShowLevelCompleteModal(false);
+    onLevelComplete({
+      score: currentScore,
+      wordsFound: foundWords,
+      stars: levelCompleteStats?.stars || 0,
+      riddleSolved: false
+    });
+  }, [currentScore, foundWords, levelCompleteStats, onLevelComplete]);
+  
+  const handleModalMenu = useCallback(() => {
+    setShowLevelCompleteModal(false);
+    onBackToMenu();
+  }, [onBackToMenu]);
+  
+  const handleModalReplay = useCallback(() => {
+    setShowLevelCompleteModal(false);
+    resetLevel();
+    setCombo(0);
+    setLastWordTime(null);
+    lastWordTimeRef.current = null;
+  }, [resetLevel]);
 
   const handleWordFormed = useCallback((word, position) => {
     const normalizedWord = word.toUpperCase().trim();
@@ -547,10 +570,23 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
         active={showParticles}
         position={particlePosition}
         type="confetti"
-        count={combo > 2 ? 50 : 30}
+        count={showLevelCompleteModal ? 100 : (combo > 2 ? 50 : 30)}
         colors={['#FFD93D', '#4CAF50', '#2563EB', '#FF6B6B', '#9B59B6']}
-        duration={2000}
+        duration={showLevelCompleteModal ? 4000 : 2000}
       />
+      
+      {/* Modal de fin de niveau */}
+      <AnimatePresence>
+        {showLevelCompleteModal && levelCompleteStats && (
+          <LevelCompleteModal
+            isOpen={showLevelCompleteModal}
+            stats={levelCompleteStats}
+            onNextLevel={handleModalNextLevel}
+            onMenu={handleModalMenu}
+            onReplay={handleModalReplay}
+          />
+        )}
+      </AnimatePresence>
       
       {/* Floating Points */}
       {floatingPoints.map(fp => (

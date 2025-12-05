@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Star, Home, ArrowRight, RotateCcw } from 'lucide-react';
+import ScoreCounter from './ScoreCounter';
 import './LevelCompleteModal.css';
 
 const LevelCompleteModal = ({
@@ -102,7 +103,9 @@ const LevelCompleteModal = ({
                         transition={{ delay: 0.8 }}
                     >
                         <span className="stat-label">Score Final</span>
-                        <span className="stat-value">{score}</span>
+                        <span className="stat-value">
+                            <ScoreCounter value={score} duration={1500} />
+                        </span>
                     </motion.div>
 
                     <motion.div
