@@ -168,7 +168,7 @@ const Game = ({ levelData, onLevelComplete, onBackToMenu }) => {
     }
     
     return { success: true, combo: currentCombo };
-  }, [foundWords, levelData.words, levelData.requiredWords, combo, addFoundWord, showFloatingPointsEffect]);
+  }, [foundWords, levelData.words, levelData.requiredWords, combo, addFoundWord, showFloatingPointsEffect, handleLevelComplete]);
   
   const handleLevelComplete = useCallback(() => {
     const finalStars = calculateStars(foundWords.length, levelData.words.length);
