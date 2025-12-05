@@ -1,22 +1,29 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Play, BookOpen, Target, Users, Lightbulb, ArrowRight } from 'lucide-react';
-import { YOUTUBE_VIDEO_URL } from '../../config/video';
+import { Play, BookOpen, Target, Users, Lightbulb, ArrowRight, Pause } from 'lucide-react';
+import nirdPresentationVideo from "../../assets/videos/video2.mp4";
+// import posterImage from '../assets/video/poster.jpg'; // Optionnel: image de prévisualisation
 import './WelcomePage.css';
 
+// src\assets\videos\video1.mp4
 const WelcomePage = ({ onStartGame }) => {
-  const [videoUrl] = useState(YOUTUBE_VIDEO_URL);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef(null);
 
-  // Extraire l'ID de la vidéo YouTube depuis l'URL
-  const getYouTubeVideoId = (url) => {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+      if (isVideoPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsVideoPlaying(!isVideoPlaying);
+    }
   };
 
-  const videoId = getYouTubeVideoId(videoUrl);
-  const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+  const handleVideoEnd = () => {
+    setIsVideoPlaying(false);
+  };
 
   const features = [
     {
@@ -98,30 +105,52 @@ const WelcomePage = ({ onStartGame }) => {
             Présentation du NIRD
           </h2>
           
-          {embedUrl ? (
-            <div className="video-wrapper">
-              <iframe
-                src={embedUrl}
-                title="Présentation NIRD"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="youtube-video"
-              />
-            </div>
-          ) : (
-            <div className="video-placeholder">
-              <div className="placeholder-content">
-                <Play className="w-16 h-16" />
-                <p className="placeholder-text">
-                  Vidéo de présentation du NIRD
-                </p>
-                <p className="placeholder-hint">
-                  L'URL de la vidéo YouTube sera ajoutée ici
-                </p>
+          <div className="video-wrapper">
+            <div className="local-video-container">
+              <video
+                ref={videoRef}
+                className="local-video"
+                controls
+                // poster={posterImage} // Optionnel: image de prévisualisation
+                onEnded={handleVideoEnd}
+                onPlay={() => setIsVideoPlaying(true)}
+                onPause={() => setIsVideoPlaying(false)}
+              >
+                <source src={nirdPresentationVideo} type="video/mp4" />
+                <source src={nirdPresentationVideo.replace('.mp4', '.webm')} type="video/webm" />
+                Votre navigateur ne supporte pas la lecture de vidéos.
+              </video>
+              
+              {/* Bouton de lecture personnalisé (optionnel) */}
+              {!isVideoPlaying && (
+                <motion.button
+                  className="custom-play-button"
+                  onClick={handlePlayPause}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Play className="w-12 h-12" />
+                </motion.button>
+              )}
+              
+              {/* Contrôles personnalisés (optionnel) */}
+              <div className="video-controls">
+                <button 
+                  className="control-btn"
+                  onClick={handlePlayPause}
+                  aria-label={isVideoPlaying ? "Pause" : "Lecture"}
+                >
+                  {isVideoPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
+                </button>
               </div>
             </div>
-          )}
+          </div>
+          
+          <p className="video-description">
+            Découvrez en vidéo la mission et les valeurs du Nouvel Institut de Recherche Digitale
+          </p>
         </div>
       </motion.section>
 
@@ -223,4 +252,3 @@ const WelcomePage = ({ onStartGame }) => {
 };
 
 export default WelcomePage;
-
